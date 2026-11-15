@@ -37,6 +37,8 @@ const introduction = {
   .hero-atmosphere { position:absolute;inset:0;z-index:-1;pointer-events:none; }
   .hero-atmosphere { mask-image:radial-gradient(ellipse at center,transparent 12%,rgba(0,0,0,.4) 48%,black 90%); }
   .signal-dots { position:absolute;inset:-48px;background-image:radial-gradient(circle,color-mix(in srgb,var(--ink) 22%,transparent) 1px,transparent 1.5px);background-size:32px 32px; }
+  :global(html[data-theme="light"]) .hero-atmosphere > .signal-dots { background-image:radial-gradient(circle,color-mix(in srgb,var(--ink) 45%,transparent) 1.2px,transparent 1.7px); }
+  :global(html[data-theme="light"]) .hero-atmosphere { mask-image:radial-gradient(ellipse at center,transparent 12%,rgba(0,0,0,.65) 48%,black 90%); }
   .signal-dots--glow { z-index:-1;pointer-events:none;background-image:radial-gradient(circle,color-mix(in srgb,var(--blue) 75%,white) 2px,var(--blue) 2.5px,transparent 5px);mask-image:radial-gradient(circle 260px at var(--cursor-x, -1000px) var(--cursor-y, -1000px),black 0%,black 25%,rgba(0,0,0,.8) 50%,transparent 100%);opacity:0;transition:opacity 180ms var(--ease-out); }
   @media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
     .hero[data-cursor-active] .signal-dots--glow { opacity:1; }

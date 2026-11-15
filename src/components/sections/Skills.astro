@@ -1,13 +1,11 @@
 ---
-import { Cloud, Cpu, Boxes, CodeXml, Database, Activity } from '@lucide/astro';
+import { Cloud, Cpu, CodeXml, Database } from '@lucide/astro';
 import TechnologyIcon from '../ui/TechnologyIcon.astro';
 const skills = [
-  { name: 'Cloud & Infrastructure', icon: Cloud, description: 'Designing cloud environments and automating infrastructure provisioning and configuration.', tools: ['AWS', 'Terraform', 'Ansible', 'Linux'] },
-  { name: 'AI Systems', icon: Cpu, description: 'Connecting models with knowledge, retrieval, and tools.', tools: ['Amazon Bedrock', 'MCP', 'RAG', 'Vector Databases'] },
-  { name: 'Containers & Delivery', icon: Boxes, description: 'Packaging applications, orchestrating workloads, and automating releases.', tools: ['Docker', 'Kubernetes', 'GitHub Actions', 'Argo CD', 'Jenkins'] },
-  { name: 'Programming & APIs', icon: CodeXml, description: 'Writing applications and scripts, and building APIs with FastAPI.', tools: ['Python', 'FastAPI', 'TypeScript', 'Bash', 'Java'] },
-  { name: 'Databases & Storage', icon: Database, description: 'Working with relational databases and cloud object storage.', tools: ['PostgreSQL', 'SQL Server', 'Amazon S3'] },
-  { name: 'Reliability & Observability', icon: Activity, description: 'Monitoring system health, tracing behavior, and responding to production incidents.', tools: ['OpenTelemetry', 'Monitoring', 'Incident Response'] },
+  { name: 'AI Systems', icon: Cpu, description: 'Building AI assistants from content preparation and retrieval through agent workflows, source-linked answers, evaluation, and tracing.', tools: ['Amazon Bedrock', 'pydantic-ai', 'RAG', 'MCP', 'Firecrawl', 'Titan Embeddings', 'Weaviate', 'Hybrid Search', 'Exa', 'Langfuse', 'LLM Evaluation'] },
+  { name: 'Cloud & DevOps', icon: Cloud, description: 'Deploying services on AWS, managing infrastructure, automating delivery, and monitoring production systems.', tools: ['AWS', 'AWS Lambda', 'Amazon S3', 'Terraform', 'Ansible', 'Linux', 'Docker', 'Kubernetes', 'GitHub Actions', 'Argo CD', 'Jenkins', 'CloudWatch', 'OpenTelemetry', 'Incident Response'] },
+  { name: 'Programming & APIs', icon: CodeXml, description: 'Building APIs with input validation and streamed responses, web interfaces, and automation scripts.', tools: ['Python', 'FastAPI', 'TypeScript', 'Astro', 'Bash', 'Java'] },
+  { name: 'Databases', icon: Database, description: 'Working with relational and NoSQL databases to store, organise, and query application data.', tools: ['PostgreSQL', 'MySQL', 'SQL Server', 'MongoDB', 'Amazon DynamoDB'] },
 ] as const;
 import SectionLabel from '../ui/SectionLabel.astro';
 ---

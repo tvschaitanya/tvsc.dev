@@ -8,15 +8,20 @@ const brands: Record<string,string> = {
   Docker:'siDocker', Kubernetes:'siKubernetes', 'GitHub Actions':'siGithubactions',
   'Argo CD':'siArgo', Jenkins:'siJenkins', Python:'siPython', FastAPI:'siFastapi',
   TypeScript:'siTypescript', Bash:'siGnubash', Java:'siOpenjdk',
-  PostgreSQL:'siPostgresql', 'SQL Server':'siMicrosoftsqlserver', 'Amazon S3':'siAmazons3',
+  PostgreSQL:'siPostgresql', MySQL:'siMysql', MongoDB:'siMongodb', 'Amazon DynamoDB':'siAmazondynamodb', 'SQL Server':'siMicrosoftsqlserver', 'Amazon S3':'siAmazons3',
   OpenTelemetry:'siOpentelemetry', MCP:'siModelcontextprotocol',
+  Astro:'siAstro', Weaviate:'siWeaviate', Langfuse:'siLangfuse',
+  'pydantic-ai':'siPydantic', Exa:'siExa', Firecrawl:'siFirecrawl',
 };
 const icons = brandIcons as unknown as Record<string,{ path: string }>;
 const brand = icons[brands[name]];
 const fallbacks = {
   AWS:Cloud, 'Amazon Bedrock':Cpu, MCP:Network, RAG:Search, 'Vector Databases':Database,
-  'SQL Server':Database, 'Amazon S3':HardDrive, Bash:Terminal, Java:Coffee,
+  'Amazon DynamoDB':Database, 'SQL Server':Database, 'Amazon S3':HardDrive, Bash:Terminal, Java:Coffee,
   Monitoring:Activity, 'Incident Response':ShieldAlert,
+  'AWS Lambda':Cloud, CloudWatch:Activity, 'Titan Embeddings':Cpu,
+  'Hybrid Search':Search, 'LLM Evaluation':Activity,
+  Weaviate:Database, Langfuse:Activity, Firecrawl:Search, Exa:Search,
 };
 const Fallback = fallbacks[name as keyof typeof fallbacks] ?? Cpu;
 ---

@@ -2,63 +2,60 @@
 import WritingLayout from '../../layouts/WritingLayout.astro';
 import ChloeArchitecture from '../../components/ChloeArchitecture.astro';
 const decisions = [
-  { title: 'Hybrid retrieval for institutional content', text: 'Weaviate combines Titan Text Embeddings v2 with BM25 to match both natural-language questions and exact program names. The knowledge base is the primary source; retrieval quality depends on the coverage and freshness of its content.' },
-  { title: 'A limited fallback to official sources', text: 'The agent can use Exa on FSU domains when the knowledge base is insufficient. Each question allows two knowledge-base searches and one web search, limiting external calls while preserving a path to information outside the index.' },
-  { title: 'Serverless hosting with progressive responses', text: 'FastAPI runs on AWS Lambda arm64 through the Lambda Web Adapter and a streaming Function URL. NDJSON events show the draft as it is generated; a final event replaces it with the checked answer and sources. The tradeoffs are startup overhead and draft text that may change after validation.' },
+  { title: 'Match both meaning and exact names', text: 'Students may describe a program differently from the website, but exact names still matter. I combined semantic search, using Titan Text Embeddings v2, with BM25 keyword search in Weaviate. This supports both kinds of questions, though the results still depend on what has been indexed and how current it is.' },
+  { title: 'Search the knowledge base first', text: 'The agent starts with the curated knowledge base. If that does not answer the question, it can search official FSU sites through Exa. I limited each exchange to two knowledge-base searches and one web search to keep the search scope and usage under control.' },
+  { title: 'Stream answers from a serverless API', text: 'I hosted FastAPI on AWS Lambda through the Lambda Web Adapter, so there is no continuously running application server to manage. The interface shows text as it arrives, then replaces the draft with the final answer and checked source list. The tradeoffs are startup delays and the possibility that draft text changes after the source check.' },
 ];
 ---
 <WritingLayout title="Chloe: a RAG assistant for CCI, FSU">
   <article>
-    <p class="kicker">Solution architecture case study</p>
-    <p class="lead">I built an assistant that helps visitors find information about Florida State University’s College of Communication &amp; Information. The system connects content ingestion, retrieval, and a streaming chat interface, with explicit controls over sources and model usage.</p>
+    <p class="kicker">Architecture Case Study</p>
+    <p class="lead">I built Chloe to help students and visitors find answers about programs, admissions, and funding at Florida State University’s College of Communication &amp; Information (CCI). It searches official college and university content, links factual answers to their sources, and asks a follow-up question when it needs more detail.</p>
     <dl class="project-facts">
-      <div><dt>Scope</dt><dd>Ingestion → retrieval → chat</dd></div>
+      <div><dt>Scope</dt><dd>Content preparation → search → chat</dd></div>
       <div><dt>Core stack</dt><dd>FastAPI · Bedrock · Weaviate · AWS Lambda</dd></div>
     </dl>
-
     <section aria-labelledby="problem-title">
       <h2 id="problem-title">The problem</h2>
-      <p>CCI spans three schools, with admissions, programs, and deadlines that vary by school and student level. A useful assistant needs to clarify that context, retrieve relevant institutional content, and give visitors sources they can verify.</p>
-      <p>I designed around four requirements: institutional content first, clarification before guessing, bounded model and search usage, and a response the interface can display progressively.</p>
+      <p>CCI has three schools, and the right answer can depend on the school, program, or student level. A question such as “When is the application deadline?” needs more context before the assistant can give a useful answer.</p>
+      <p>I wanted visitors to get a clear answer and a page they could check for themselves. The design also needed to handle unclear questions, acknowledge missing information, and keep the cost of each exchange under control.</p>
     </section>
-
     <section aria-labelledby="solution-title">
       <h2 id="solution-title">The solution</h2>
-      <p>An ingestion pipeline prepares content for Weaviate. At query time, FastAPI validates the request and verifies Cloudflare Turnstile before invoking a pydantic-ai agent powered by Claude Haiku 4.5 on Amazon Bedrock.</p>
-      <p>The agent clarifies ambiguous questions, declines unrelated requests, and retrieves supporting content before answering factual questions. The backend removes sources that did not come from a search. If no valid source remains, it returns a no-information response.</p>
+      <p>Chloe uses retrieval-augmented generation (RAG): it looks up relevant content and gives that information to the model to help it answer. An AI agent decides when to search, when to ask for clarification, and when a question falls outside its scope.</p>
+      <p>The system has three parts: a pipeline that prepares the knowledge base, a FastAPI service that runs the agent, and a chat interface that displays the answer as it arrives. The agent uses Claude Haiku 4.5 through Amazon Bedrock, coordinated by pydantic-ai.</p>
     </section>
-
+    <section aria-labelledby="ingestion-title">
+      <h2 id="ingestion-title">Preparing the knowledge base</h2>
+      <p>The pipeline starts with a curated list of pages fetched through Firecrawl. It removes repeated website content and breaks each page into smaller sections using its headings. Each section keeps a link back to its source, while FAQs and reference pages receive their own treatment.</p>
+      <p>Before indexing, Claude Haiku adds a short description to help place each section in context. Titan v2 then converts the text into a numerical representation for search. The pipeline skips unchanged documents and, during full runs, removes content no longer on the source list. That avoids unnecessary processing, but the list still needs to be maintained.</p>
+    </section>
     <ChloeArchitecture />
-
     <section aria-labelledby="decisions-title">
       <h2 id="decisions-title">Architecture decisions</h2>
       <div class="decisions">{decisions.map(decision => <div class="decision"><h3>{decision.title}</h3><p>{decision.text}</p></div>)}</div>
     </section>
-
     <section aria-labelledby="controls-title">
-      <h2 id="controls-title">Trust boundaries and operating limits</h2>
-      <p>Browser-supplied history is untrusted: only the last six turns are passed as quoted context. Each question is capped at <strong>five tool calls</strong>, <strong>eight model requests</strong>, <strong>800 output tokens</strong>, and a <strong>60-second</strong> Lambda execution window.</p>
-      <p>Turnstile and request limits constrain access and usage. They do not replace traffic-level rate limits or spending controls. Source checking establishes provenance; it does not prove that every claim is supported or fully prevent prompt injection.</p>
+      <h2 id="controls-title">Keeping answers grounded and usage bounded</h2>
+      <p>Cloudflare Turnstile checks requests before they reach paid model or search services. The agent receives only the last six conversation turns as quoted context. Each question allows up to <strong>five tool calls</strong> and <strong>eight model requests</strong>, with a <strong>60-second</strong> execution limit and an <strong>800-token</strong> limit per model response.</p>
+      <p>Before sending the final factual answer, the backend removes source links that were not returned by a search. If none remain, Chloe says it could not find a reliable answer. This checks where the links came from; it does not prove every claim is correct. Broader traffic limits, spending controls, and protection against malicious instructions remain separate concerns.</p>
     </section>
-
     <section aria-labelledby="operations-title">
-      <h2 id="operations-title">Deployment and observability</h2>
-      <p>Terraform provisions the Lambda, streaming endpoint, permissions, logs, and S3 artifact storage. Secrets load from encrypted Systems Manager parameters at startup. CloudWatch captures application logs; Langfuse records model calls, tool calls, and token usage through OpenTelemetry.</p>
-      <p>The service depends on Bedrock access, available secrets, and a populated Weaviate collection. These dependencies, along with external search, need monitoring alongside the API.</p>
+      <h2 id="operations-title">Deploying and monitoring the service</h2>
+      <p>I used Terraform to define the AWS infrastructure and encrypted Systems Manager parameters to supply secrets at startup. CloudWatch captures application logs. Langfuse traces model and search activity through OpenTelemetry, making it possible to inspect individual exchanges and token usage.</p>
+      <p>Running the service also means monitoring its dependencies: Bedrock, Weaviate, external search, and access to the required secrets.</p>
     </section>
-
     <section aria-labelledby="demonstration-title">
       <h2 id="demonstration-title">Leadership Board demonstration</h2>
       <p>I presented the assistant at a CCI Leadership Board meeting at Florida State University. Attendees tried it live with questions about the college, alongside off-topic and playful prompts. In those interactions, the assistant stayed within its intended scope.</p>
-      <p>The session provided direct feedback from stakeholders and an opportunity to observe the assistant outside prepared examples.</p>
+      <p>Seeing people try their own questions gave me feedback beyond prepared examples and a chance to discuss the design with college leadership.</p>
       <a class="recap-link" href="https://lnkd.in/p/eJTJ_A8f" target="_blank" rel="noopener noreferrer">Read the presentation recap ↗</a>
     </section>
-
     <section aria-labelledby="outcome-title">
-      <h2 id="outcome-title">Outcome and next validation</h2>
-      <p>The implementation connects the ingestion pipeline to a source-linked chat experience, with explicit paths for clarification, off-topic questions, and missing information.</p>
-      <p>The current estimated cost is <strong>about $0.01 per question-and-answer exchange</strong>.</p>
-      <p>Answer quality, latency, and adoption have not been quantified here. The next step is an evaluation set across all three schools to test retrieval relevance, citation support, and no-information behavior, followed by latency and concurrency testing.</p>
+      <h2 id="outcome-title">Results and lessons</h2>
+      <p>In a small initial evaluation, <strong>88% of factual responses were graded correct</strong> by an AI judge against the retrieved source text. This is an early indication of answer quality, with human review still needed.</p>
+      <p>The results suggest Chloe handles straightforward factual questions more reliably than ambiguous ones. Asking for clarification before searching and handling failed requests more gracefully are the main areas to improve.</p>
+      <p>The current estimated cost is <strong>about $0.01 per question-and-answer exchange</strong>. Broader evaluation, response-time measurement, and simultaneous-user testing are next steps.</p>
     </section>
     <a class="closing-link" href="/#projects">← Explore other projects</a>
   </article>
