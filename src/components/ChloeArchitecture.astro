@@ -1,6 +1,6 @@
 <section class="architecture" aria-labelledby="architecture-title">
-  <div class="diagram-heading"><div><p class="eyebrow">Architecture · Query path</p><h2 id="architecture-title">From question to answer</h2></div><button id="flow-pause" type="button">Pause</button></div>
-  <p class="diagram-intro">The knowledge base comes first. Exa searches official FSU domains only when the retrieved information cannot answer the question. The dashed Exa branch is a fallback; the animation follows the knowledge-base path.</p>
+  <div class="diagram-heading"><div><h2 id="architecture-title">From question to answer</h2></div></div>
+  <p class="diagram-intro">The primary path uses the knowledge base. The dashed Exa branch searches official FSU domains when that content is insufficient.</p>
   <div class="diagram-scroll" tabindex="0" role="region" aria-label="Chloe architecture diagram, scroll horizontally to explore"><svg id="flow" viewBox="0 0 1330 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="flow-title flow-desc" class="flow-diagram" font-family="ui-sans-serif, system-ui, sans-serif">
           <title id="flow-title">Chloe question to answer loop</title>
           <desc id="flow-desc">A visitor's question goes through the chat UI to a streaming FastAPI Lambda, which checks Turnstile and runs an agent. The agent embeds the query with Titan, searches Weaviate, Exa only as a fallback when the knowledge base has no info, and Bedrock, then the answer streams back to the chat UI and the visitor.</desc>
@@ -56,23 +56,18 @@
           <g class="pill e-main"><rect x="428.9" y="341" width="82.2" height="16" rx="8"/><text x="470.0" y="352" text-anchor="middle" font-size="9.5" font-weight="600">NDJSON stream</text></g>
           <g class="pill e-main"><rect x="195.8" y="341" width="44.4" height="16" rx="8"/><text x="218.0" y="352" text-anchor="middle" font-size="9.5" font-weight="600">answer</text></g>
           <g class="pill e-dash"><rect x="611.0" y="365" width="71.4" height="16" rx="8"/><text x="646.7" y="376" text-anchor="middle" font-size="9.5" font-weight="600">OTel traces</text></g>
-          <g id="comets"></g>
         </svg></div>
   <p class="diagram-note">On smaller screens, scroll sideways to explore the diagram.</p>
 </section>
 <style>
-  .architecture { margin-block:64px; }
+  .architecture { margin-block:48px; }
   .diagram-heading { display:flex;align-items:center;justify-content:space-between;gap:20px; }
-  .eyebrow { color:var(--muted);font:12px var(--font-mono);margin-bottom:12px; }
-  h2 { font-size:clamp(28px,4vw,40px);line-height:1.15;margin-bottom:16px;letter-spacing:-.035em; }
-  button { flex-shrink:0;min-height:44px;padding:8px 18px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;cursor:pointer; }
-  button:disabled { opacity:.65;cursor:default; }
+  h2 { font-size:clamp(24px,3vw,30px);line-height:1.15;margin-bottom:16px;letter-spacing:-.035em; }
   .diagram-intro { max-width:76ch;color:var(--muted);line-height:1.75; }
-  .diagram-scroll { overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:16px; }
-  .flow-diagram { display:block;width:100%;min-width:1050px; }
+  .diagram-scroll { overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:16px; }
+  .flow-diagram { display:block;width:100%;min-width:900px; }
   .diagram-note { color:var(--muted);font-size:12px;margin:12px 0 0; }
-  #flow { --card:var(--surface);--flow-accent:#4f46e5;--fe:#0284c7;--be:#4f46e5;--cloud:#d97706;--sec:#e11d48;--ext:#64748b;--db:#059669; }
-  :global(html[data-theme="dark"]) #flow { --flow-accent:#818cf8;--fe:#38bdf8;--be:#818cf8;--cloud:#fbbf24;--sec:#fb7185;--ext:#94a3b8;--db:#34d399; }
+  #flow { --card:var(--surface);--flow-accent:var(--orange);--fe:var(--muted);--be:var(--orange);--cloud:var(--muted);--sec:var(--muted);--ext:var(--muted);--db:var(--muted); }
   #flow .e-main { --c:var(--flow-accent); } #flow .e-plain { --c:var(--muted); } #flow .e-sec { --c:var(--sec); } #flow .e-dash { --c:var(--cloud); }
   #flow .edge { stroke:var(--c);stroke-width:1.8;stroke-opacity:.6; } #flow .edge.e-dash { stroke-dasharray:5 4; }
   #flow .m-main { fill:var(--flow-accent); } #flow .m-plain { fill:var(--muted); } #flow .m-sec { fill:var(--sec); } #flow .m-dash { fill:var(--cloud); }
@@ -81,104 +76,4 @@
   #flow .t-fe { --c:var(--fe); } #flow .t-be { --c:var(--be); } #flow .t-db { --c:var(--db); } #flow .t-cloud { --c:var(--cloud); } #flow .t-sec { --c:var(--sec); } #flow .t-ext { --c:var(--ext); }
   #flow .node rect { fill:color-mix(in srgb,var(--c) 9%,var(--card));stroke:var(--c);stroke-width:1.5; }
   #flow .node .nl { fill:var(--ink); } #flow .node .ns { fill:var(--muted); }
-  #flow :global(.node.lit rect) { stroke-width:2.6; }
 </style>
-<script>
-      const STEP_IDS = ["user-ui","ui-api","api-turnstile","turnstile-api","api-agent","agent-bedrock","bedrock-agent","agent-titan","titan-agent","agent-weaviate","weaviate-agent","agent-bedrock","bedrock-agent","agent-api","api-ui","ui-user","api-langfuse"];
-      const SPEED = 120;      // px per second
-      const MIN_TRAVEL = 900; // ms
-      const HANDOFF = 350;    // ms between steps
-      const REST = 1600;      // ms before the loop restarts
-
-      const svg = document.getElementById("flow") as unknown as SVGSVGElement;
-      const layer = document.getElementById("comets") as unknown as SVGGElement;
-      const pauseBtn = document.getElementById("flow-pause") as HTMLButtonElement;
-
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      const edge = (id: string) => svg.querySelector<SVGPathElement>(`[data-edge="${id}"]`)!;
-      const node = (id: string) => svg.querySelector<SVGGElement>(`[data-node="${id}"]`)!;
-      const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-      // ---- animation: loops continuously; the visitor can pause and resume ----
-      let token = 0;          // bumped by Replay to cancel the pass in progress
-      let paused = false;
-
-      let currentAnim: Animation | null = null;
-
-      function setUi() {
-        pauseBtn.textContent = paused ? "Resume" : "Pause";
-      }
-
-      async function step(id: string, my: number) {
-        const base = edge(id);
-        const len = base.getTotalLength();
-        const travel = Math.max(MIN_TRAVEL, (len / SPEED) * 1000);
-        const from = node(base.dataset.from!);
-        const to = node(base.dataset.to!);
-        from.classList.add("lit");
-
-        const comet = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        comet.setAttribute("d", base.getAttribute("d")!);
-        comet.setAttribute("fill", "none");
-        comet.setAttribute("stroke-width", "4");
-        comet.setAttribute("stroke-linecap", "round");
-        comet.style.stroke = getComputedStyle(base).stroke;
-        const head = Math.min(26, len * 0.5);
-        comet.setAttribute("stroke-dasharray", `${head} ${len + head}`);
-        comet.style.filter = `drop-shadow(0 0 4px ${comet.style.stroke})`;
-        layer.appendChild(comet);
-
-        const glow = base.animate([{ strokeOpacity: 0.6 }, { strokeOpacity: 1 }, { strokeOpacity: 0.6 }], { duration: travel + 600 });
-        const run = comet.animate(
-          [{ strokeDashoffset: head }, { strokeDashoffset: -len }],
-          { duration: travel, easing: "ease-in-out", fill: "forwards" }
-        );
-        currentAnim = run;
-        if (paused) { run.pause(); glow.pause(); }
-        pausables = [run, glow];
-        await run.finished.catch(() => {});
-        comet.remove();
-        from.classList.remove("lit");
-        if (my === token) {
-          to.classList.add("lit");
-          setTimeout(() => to.classList.remove("lit"), 700);
-        }
-      }
-      let pausables: Animation[] = [];
-
-      async function pause(ms: number, my: number) {
-        const end = Date.now() + ms;
-        while (my === token && (Date.now() < end || paused)) await wait(60);
-      }
-
-      async function play() {
-        const my = ++token;
-        currentAnim?.cancel();
-        layer.innerHTML = "";
-        svg.querySelectorAll(".lit").forEach((n) => n.classList.remove("lit"));
-        paused = false;
-
-        setUi();
-        while (my === token) {
-          for (const id of STEP_IDS) {
-            if (my !== token) return;
-            await step(id, my);
-            await pause(HANDOFF, my);
-          }
-          await pause(REST, my);
-        }
-      }
-
-      pauseBtn.addEventListener("click", () => {
-        paused = !paused;
-        pausables.forEach((a) => (paused ? a.pause() : a.play()));
-        setUi();
-      });
-
-      setUi();
-      if (!reduce) play();
-      else { pauseBtn.disabled = true; pauseBtn.textContent = "Motion reduced"; }
-      window.addEventListener('pagehide', () => { token++; pausables.forEach(animation => animation.cancel()); }, { once: true });
-
-</script>

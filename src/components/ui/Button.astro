@@ -2,8 +2,10 @@
 import Icon from './Icon.astro';
 interface Props { href: string; variant?: 'primary' | 'secondary'; external?: boolean; }
 const { href, variant = 'primary', external = false } = Astro.props;
+// Absolute web destinations open safely even when the caller omits `external`.
+const opensNewTab = external || /^(?:https?:)?\/\//i.test(href);
 ---
-<a class:list={['button', `button--${variant}`]} href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}><span><slot /></span><Icon size={19} /></a>
+<a class:list={['button', `button--${variant}`]} href={href} target={opensNewTab ? '_blank' : undefined} rel={opensNewTab ? 'noopener noreferrer' : undefined}><span><slot /></span><Icon size={19} /></a>
 <style>
   .button { min-height: 52px; display: inline-flex; align-items: center; justify-content: space-between; gap: 40px; padding: 12px 24px; border: 2px solid var(--deep); border-radius: 7px; font-size: 16px; font-weight: 500; transition: transform 160ms var(--ease-out), background-color 160ms ease, color 160ms ease; }
   .button--primary { background:var(--blue);color:var(--paper);box-shadow:4px 4px 0 var(--ink); }

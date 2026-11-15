@@ -24,3 +24,7 @@ Content stays in its owning Astro component, not a central data file. Shared sty
 ## Verification preference
 
 The owner runs the dev server and manual testing. No tests, builds, screenshots, or browser checks were run for the centered hero redesign.
+
+## Link behavior
+
+External web links open in a new tab with `target="_blank"` and `rel="noopener noreferrer"`. Use HTTPS destinations. The shared Button detects absolute web URLs automatically; plain anchors must include these attributes explicitly. Internal page links and section anchors stay in the current tab. Email links use `mailto:` and the visitor’s configured email handler.
