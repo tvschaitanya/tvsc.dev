@@ -71,3 +71,4 @@ Content lives at the top of the component that renders it, inside its Astro fron
 - `BaseLayout.astro`: page title and social metadata.
 
 There is no central content file. If you change a repeated identity detail such as your name, also update the header, footer, and page metadata where appropriate.
+# tvsc.dev
