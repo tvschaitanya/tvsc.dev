@@ -1,0 +1,27 @@
+---
+import * as brandIcons from 'simple-icons';
+import { Cloud, Cpu, Network, Search, Database, Terminal, Coffee, Activity, ShieldAlert, HardDrive } from '@lucide/astro';
+interface Props { name: string; size?: number; }
+const { name, size = 16 } = Astro.props;
+const brands: Record<string,string> = {
+  AWS:'siAmazonwebservices', Terraform:'siTerraform', Ansible:'siAnsible', Linux:'siLinux',
+  Docker:'siDocker', Kubernetes:'siKubernetes', 'GitHub Actions':'siGithubactions',
+  'Argo CD':'siArgo', Jenkins:'siJenkins', Python:'siPython', FastAPI:'siFastapi',
+  TypeScript:'siTypescript', Bash:'siGnubash', Java:'siOpenjdk',
+  PostgreSQL:'siPostgresql', 'SQL Server':'siMicrosoftsqlserver', 'Amazon S3':'siAmazons3',
+  OpenTelemetry:'siOpentelemetry', MCP:'siModelcontextprotocol',
+};
+const icons = brandIcons as unknown as Record<string,{ path: string }>;
+const brand = icons[brands[name]];
+const fallbacks = {
+  AWS:Cloud, 'Amazon Bedrock':Cpu, MCP:Network, RAG:Search, 'Vector Databases':Database,
+  'SQL Server':Database, 'Amazon S3':HardDrive, Bash:Terminal, Java:Coffee,
+  Monitoring:Activity, 'Incident Response':ShieldAlert,
+};
+const Fallback = fallbacks[name as keyof typeof fallbacks] ?? Cpu;
+---
+{brand ? (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={brand.path} /></svg>
+) : (
+  <Fallback size={size} stroke-width={1.75} aria-hidden="true" />
+)}

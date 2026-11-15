@@ -1,14 +1,17 @@
 ---
-import Icon from './ui/Icon.astro';
+import { Sun, Moon } from '@lucide/astro';
 ---
-<div class="theme-control" role="group" aria-label="Color theme"><button type="button" data-set-theme="light" aria-label="Light theme" aria-pressed="false"><Icon name="sun" size={15} /><span>Light</span></button><button type="button" data-set-theme="dark" aria-label="Dark theme" aria-pressed="true"><Icon name="moon" size={15} /><span>Dark</span></button></div>
+<div class="theme-control" role="group" aria-label="Color theme">
+  <button type="button" data-set-theme="light" aria-label="Light theme" title="Light theme" aria-pressed="false"><Sun size={17} stroke-width={1.6} aria-hidden="true" /></button>
+  <button type="button" data-set-theme="dark" aria-label="Dark theme" title="Dark theme" aria-pressed="true"><Moon size={17} stroke-width={1.6} aria-hidden="true" /></button>
+</div>
 <script>
   import { initThemeControls } from '../scripts/theme';
   initThemeControls();
 </script>
 <style>
-  .theme-control { display:flex; padding:3px; border:1px solid var(--line); border-radius:var(--radius); }
-  button { display:flex; align-items:center; justify-content:center; gap:6px; min-width:44px; min-height:44px; padding:8px 10px; border:0; border-radius:2px; background:transparent; color:var(--muted); cursor:pointer; font:400 12px var(--font-text); transition:background-color 160ms ease,color 160ms ease; }
-  :global([data-theme=light]) [data-set-theme=light], :global([data-theme=dark]) [data-set-theme=dark] { background:var(--surface); color:var(--ink); }
-  @media(max-width:1023px) { button span { display:none; } button { min-height:44px; padding:8px; } }
+  .theme-control { display:flex;flex-shrink:0;gap:0;padding:2px;border:1px solid color-mix(in srgb,var(--ink) 14%,transparent);border-radius:28px; }
+  button { display:grid;place-items:center;width:44px;height:40px;min-height:44px;padding:0;border:0;border-radius:50%;background:transparent;color:var(--muted);cursor:pointer;transition:background-color 160ms ease,color 160ms ease; }
+  :global([data-theme=light]) [data-set-theme=light],:global([data-theme=dark]) [data-set-theme=dark] { background:var(--surface);color:var(--ink); }
+  @media(hover:hover) and (pointer:fine) { button:hover { color:var(--ink); } }
 </style>

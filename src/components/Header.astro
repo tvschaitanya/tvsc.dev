@@ -10,21 +10,42 @@ const navigation = [
 ];
 import ThemeToggle from './ThemeToggle.astro';
 ---
-<header class="site-header nav nav--centre"><div class="wrap header-inner"><a class="skip-link" href="#main">Skip to content</a><a class="brand" href="#home" aria-label={`${siteName} — Home`}><span class="brand-mark" aria-hidden="true">c<span>.</span></span><span>Chaitanya<span class="brand-detail">'s Portfolio</span></span></a><nav class="navigation" aria-label="Main navigation">{navigation.map(({label,href}) => <a class:list={['nav-link', { 'is-active': label === 'Home' }]} href={href} aria-current={label === 'Home' ? 'location' : undefined}>{label}</a>)}</nav><ThemeToggle /></div></header>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="brand" href="#home" aria-label={`${siteName} — Home`}>
+      <span class="brand-name">Chaitanya<span class="brand-detail">'s Portfolio</span></span>
+    </a>
+    <nav class="navigation" aria-label="Main navigation">
+      {navigation.map(({label,href}) => (
+        <a class:list={['nav-link',{'is-active':label === 'Home'}]} href={href} aria-current={label === 'Home' ? 'location' : undefined}>{label}</a>
+      ))}
+    </nav>
+    <ThemeToggle />
+  </div>
+</header>
 <script>
   import { initNavigation } from '../scripts/navigation';
   initNavigation();
 </script>
 <style>
-  .site-header { position:fixed; inset:0 0 auto; height:var(--nav-height); z-index:20; background:var(--bg); border-bottom:1px solid var(--line); }
-  .header-inner { height:100%; display:flex; align-items:center; justify-content:space-between; gap:24px; }
-  .brand { min-height:44px;display:flex; align-items:center; gap:12px; font-size:15px; font-weight:500; white-space:nowrap; }
-  .brand-mark { font:600 40px/.8 var(--font-display); letter-spacing:-5px; margin-right:6px; }.brand-mark { color:var(--blue); }.brand-mark span { color:var(--orange); }
-  .navigation { display:flex; gap:28px; height:100%; align-items:center; }
-  .nav-link { display:flex; align-items:center; min-height:44px; font-size:14px; color:var(--muted); position:relative; }
-  .nav-link:after { content:''; position:absolute; left:0; right:0; bottom:3px; height:2px; background:var(--blue); transform:scaleX(0); transform-origin:left; transition:transform 160ms var(--ease-out); }
-  .nav-link.is-active { color:var(--ink); }.nav-link.is-active:after { transform:scaleX(1); }
-  @media(hover:hover) and (pointer:fine) { .nav-link:hover { color:var(--ink); }.nav-link:hover:after { transform:scaleX(1); } }
-  @media(max-width:1100px) { .brand-detail { display:none; }.navigation { gap:16px; } }
-  @media(max-width:767px) { .header-inner { flex-wrap:wrap; gap:0 16px; align-content:center; }.brand { font-size:15px; }.brand-mark { font-size:34px; }.navigation { order:3; width:100%; justify-content:space-between; height:44px; margin-top:6px; gap:0; }.nav-link { font-size:13px; justify-content:center; min-width:44px; } }
+  .site-header { position:fixed;inset:0 0 auto;height:var(--nav-height);z-index:20;background:var(--bg);border-bottom:1px solid color-mix(in srgb,var(--ink) 10%,transparent); }
+  @supports(backdrop-filter:blur(16px)) { .site-header { background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(16px); } }
+  .header-inner { height:100%;display:flex;align-items:center;justify-content:space-between;gap:24px; }
+  .brand { display:inline-flex;align-items:center;gap:11px;min-height:44px;white-space:nowrap; }
+  .brand-name { font:500 15px var(--font-display);letter-spacing:-.3px; }
+  .brand-detail { font-weight:400;color:var(--muted); }
+  .navigation { display:flex;align-items:center;gap:4px; }
+  .nav-link { position:relative;display:flex;align-items:center;justify-content:center;min-height:44px;padding:10px 14px;border-radius:24px;font-size:13px;font-weight:500;color:var(--muted);transition:background-color 160ms ease,color 160ms ease; }
+  .nav-link.is-active { color:var(--ink);background:var(--surface); }
+  .nav-link:after { content:'';position:absolute;left:calc(50% - 2px);bottom:5px;width:4px;height:4px;border-radius:50%;background:var(--orange);opacity:0; }
+  .nav-link.is-active:after { opacity:1; }
+  @media(hover:hover) and (pointer:fine) { .nav-link:hover { color:var(--ink);background:var(--surface); } }
+  @media(max-width:1100px) { .brand-detail { display:none; }.navigation { gap:0; }.nav-link { padding-inline:11px; }.header-inner { gap:16px; } }
+  @media(max-width:767px) {
+    .header-inner { flex-wrap:wrap;align-content:center;gap:6px 16px; }
+    .brand { margin-right:auto; }
+    .navigation { order:3;width:100%;justify-content:space-between;gap:0; }
+    .nav-link { flex:1;min-width:0;padding:10px 6px;font-size:12px; }
+  }
 </style>

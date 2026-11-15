@@ -21,15 +21,15 @@ import SectionArtwork from './SectionArtwork.astro';
     <div class="contact-content">
       <h2 id="contact-title">Let’s connect<span class="accent">.</span></h2>
       <p class="contact-description">{contact.description}</p>
-      <a class="email-link" href={`mailto:${contact.email}`}>
-        <span>Email</span>
-        <Icon size={24} />
-      </a>
-      <nav class="social-links" aria-label="Social profiles">
+      <nav class="contact-links" aria-label="Contact links">
+        <a href={`mailto:${contact.email}`}>
+          <span>Email</span>
+          <Icon size={18} />
+        </a>
         {socialLinks.map(link => (
           <a href={link.href} target="_blank" rel="noopener noreferrer">
             <span>{link.label}</span>
-            <Icon size={16} />
+            <Icon size={18} />
           </a>
         ))}
       </nav>
@@ -73,27 +73,23 @@ import SectionArtwork from './SectionArtwork.astro';
   .contact-content { max-width:680px;min-width:0; }
   .closing h2 { font-size:clamp(52px,6.5vw,88px);letter-spacing:-.055em;line-height:1.05;margin:0 0 24px; }
   .contact-description { max-width:560px;font-size:18px;line-height:1.75;color:var(--muted);margin:0 0 32px; }
-  .email-link { display:inline-flex;align-items:center;gap:20px;min-height:48px;padding:8px 0;border-bottom:1px solid var(--paper);font-size:clamp(18px,2.2vw,28px);letter-spacing:-.025em; }
-  .email-link :global(svg) { color:var(--orange);flex-shrink:0;transition:transform 160ms var(--ease-out); }
-  .social-links { display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:24px; }
-  .social-links a { display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:15px; }
-  .social-links :global(svg) { color:var(--orange);transition:transform 160ms var(--ease-out); }
+  .contact-links { display:flex;align-items:center;flex-wrap:wrap;gap:16px 24px; }
+  .contact-links a { display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:8px 0;border-bottom:1px solid var(--paper);font-size:18px;font-weight:500;letter-spacing:-.02em;white-space:nowrap; }
+  .contact-links :global(svg) { color:var(--orange);flex-shrink:0;transition:transform 160ms var(--ease-out); }
   .footer-base { background:var(--bg);color:var(--muted);border-top:1px solid var(--line); }
   .footer-bottom { position:relative;display:flex;align-items:center;justify-content:center;min-height:96px;padding-block:24px;font-size:12px;text-align:center; }
   .copyright { margin-left:16px; }
   .back-to-top { position:absolute;right:0;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:48px;height:48px;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--ink);font-size:24px; }
   .back-to-top span { transition:transform 160ms var(--ease-out); }
   @media(hover:hover) and (pointer:fine) {
-    .social-links a:hover :global(svg),.email-link:hover :global(svg) { transform:translate(2px,-2px); }
+    .contact-links a:hover :global(svg) { transform:translate(2px,-2px); }
     .back-to-top:hover span { transform:translateY(-3px); }
   }
   @media(max-width:767px) { .contact-layout { grid-template-columns:1fr;gap:40px; } }
   @media(max-width:639px) {
     .closing h2 { font-size:clamp(44px,11.5vw,64px); }
     .contact-description { font-size:16px;margin-bottom:24px; }
-        .email-link { font-size:clamp(16px,4.8vw,22px);gap:12px; }
-    .email-link :global(svg) { width:20px;height:20px; }
-    .social-links { gap:8px 20px; }
+    .contact-links { display:grid;grid-template-columns:repeat(2,max-content);gap:12px 28px; }.contact-links a { font-size:18px; }
     .footer-bottom { flex-direction:column;gap:20px;padding-block:24px; }
     .copyright { display:block;margin:8px 0 0; }
     .back-to-top { position:static;transform:none; }
