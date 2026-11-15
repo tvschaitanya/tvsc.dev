@@ -5,6 +5,7 @@ const projects = [
     title: 'AI RAG chatbot for CCI',
     category: 'AI engineering',
     description: 'How I built a retrieval-augmented chatbot for CCI.',
+    skills: ['RAG', 'Amazon Bedrock', 'FastAPI', 'Weaviate', 'AWS Lambda', 'Terraform'],
     visual: 'chatbot',
     href: '/blogs/cci-rag-chatbot/',
   },
@@ -12,6 +13,7 @@ const projects = [
     title: 'On-premises to AWS migration plan',
     category: 'Cloud architecture',
     description: 'How I designed a plan to migrate on-premises infrastructure to AWS.',
+    skills: ['AWS', 'Cloud Architecture', 'Migration Planning'],
     visual: 'migration',
     href: '/blogs/on-premises-to-aws/',
   },
@@ -56,6 +58,9 @@ import SectionLabel from '../ui/SectionLabel.astro';
             <span class="project-category">{project.category}</span>
             <h3 id={`project-${project.visual}`}>{project.title}</h3>
             <p>{project.description}</p>
+            <ul class="project-tags" aria-label={`${project.title} skills`}>
+              {project.skills.map(skill => <li>{skill}</li>)}
+            </ul>
             <span class="project-cta" aria-hidden="true">Read story <span class="project-arrow">↗</span></span>
           </div>
           </a>
@@ -86,6 +91,8 @@ import SectionLabel from '../ui/SectionLabel.astro';
   .diagram-cloud { fill:var(--blue);stroke:var(--deep);stroke-width:2; }
   .cloud-label { fill:var(--paper);font:500 23px var(--font-display); }
   .project-copy { display:flex;flex-direction:column;flex:1;padding:20px; }
+  .project-tags { display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:18px 0 8px; }
+  .project-tags li { padding:5px 11px;border:1px solid color-mix(in srgb,var(--ink) 32%,transparent);border-radius:999px;color:var(--ink);font-size:12px;line-height:1.5; }
   .project-category { font:12px var(--font-mono);color:var(--muted); }
   .project h3 { font-size:24px;line-height:1.25;letter-spacing:-.035em;margin:10px 0; }
   .project-cta { display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:auto;padding-top:16px;font-size:14px;font-weight:500; }
