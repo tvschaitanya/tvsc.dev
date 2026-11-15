@@ -16,6 +16,13 @@ const portraitSrc = '/images/tvsc.jpeg';
       <div class="about-story">
         <h2 id="about-title">Curiosity <br />comes first<span class="orange">.</span></h2>
         {biography.map(paragraph => <p>{paragraph}</p>)}
+        <div class="about-credentials">
+          <h3>Certifications</h3>
+          <ul>
+            <li>AWS Certified Solutions Architect – Associate</li>
+            <li>AWS Certified AI Practitioner</li>
+          </ul>
+        </div>
       </div>
       <div class="about-portrait">
         <Portrait src={portraitSrc} />
@@ -29,6 +36,11 @@ const portraitSrc = '/images/tvsc.jpeg';
   .about-story h2 { margin-bottom:32px; }
   .about-story p { color:var(--muted);font-size:16px;line-height:1.75;margin-bottom:20px;max-width:560px; }
   .about-story p:last-child { margin-bottom:0; }
+  .about-credentials { margin-top:28px;padding-top:24px;border-top:1px solid var(--line); }
+  .about-credentials h3 { font-size:14px;font-weight:500;line-height:1.4;margin:0 0 12px;color:var(--ink); }
+  .about-credentials ul { list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px; }
+  .about-credentials li { display:flex;align-items:baseline;gap:10px;font-size:14px;line-height:1.6;color:var(--ink); }
+  .about-credentials li::before { content:'';width:6px;height:6px;flex-shrink:0;border-radius:50%;background:var(--blue);align-self:flex-start;margin-top:8px; }
   .about-portrait { min-width:0; }
   @media(max-width:1023px) { .about-grid { gap:48px; } }
   @media(max-width:639px) { .about-grid { grid-template-columns:1fr;gap:40px; }.about-story h2 br { display:none; } }

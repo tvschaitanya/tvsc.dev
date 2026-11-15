@@ -5,16 +5,17 @@ import Icon from '../ui/Icon.astro';
 const introduction = {
   firstName: 'Chaitanya',
   role: 'Cloud & AI Engineer',
-  introduction: 'I connect business needs with practical cloud and AI solutions.',
-  summary: 'Hands-on experience in development, production operations, and automation shapes how I balance cost, reliability, and complexity.',
+  introduction: 'I help teams turn business needs into cloud and AI solutions that are reliable and easier to manage.',
+  summary: 'With experience in development, production operations, and automation, I consider both what it takes to build a system and what it takes to keep it running.',
 };
 ---
 <section id="home" class="hero" data-enter aria-labelledby="hero-title">
   <div class="hero-atmosphere" aria-hidden="true">
     <div class="signal-dots"></div>
-    <div class="signal-rings signal-rings--blue"></div>
-    <div class="signal-rings signal-rings--orange"></div>
+    <div class="signal-rings signal-rings--left"></div>
+    <div class="signal-rings signal-rings--right"></div>
   </div>
+  <div class="signal-dots signal-dots--glow" aria-hidden="true"></div>
   <div class="wrap hero-inner">
     <div class="hero-copy">
       <p class="hello" data-hero-item>Hello, I’m</p>
@@ -36,13 +37,17 @@ const introduction = {
   .hero-atmosphere { position:absolute;inset:0;z-index:-1;pointer-events:none; }
   .hero-atmosphere { mask-image:radial-gradient(ellipse at center,transparent 12%,rgba(0,0,0,.4) 48%,black 90%); }
   .signal-dots { position:absolute;inset:-48px;background-image:radial-gradient(circle,color-mix(in srgb,var(--ink) 22%,transparent) 1px,transparent 1.5px);background-size:32px 32px; }
+  .signal-dots--glow { z-index:-1;pointer-events:none;background-image:radial-gradient(circle,color-mix(in srgb,var(--blue) 75%,white) 2px,var(--blue) 2.5px,transparent 5px);mask-image:radial-gradient(circle 260px at var(--cursor-x, -1000px) var(--cursor-y, -1000px),black 0%,black 25%,rgba(0,0,0,.8) 50%,transparent 100%);opacity:0;transition:opacity 180ms var(--ease-out); }
+  @media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+    .hero[data-cursor-active] .signal-dots--glow { opacity:1; }
+  }
   .signal-rings { position:absolute;width:900px;height:900px;border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 63px,currentColor 64px 65px,transparent 67px 96px);opacity:.4;transform-origin:center; }
-  .signal-rings--blue { color:var(--blue);left:-430px;top:-280px; }
-  .signal-rings--orange { color:var(--orange);right:-470px;bottom:-430px; }
+  .signal-rings--left { color:var(--blue);left:-430px;top:-280px; }
+  .signal-rings--right { color:var(--blue);right:-470px;bottom:-430px; }
   @media(prefers-reduced-motion:no-preference) {
 
     .signal-rings { opacity:0;animation:signal-expand 2.4s cubic-bezier(.37,0,.63,1) 1 both; }
-    .signal-rings--orange { animation-delay:2.4s; }
+    .signal-rings--right { animation-delay:2.4s; }
   }
   @keyframes signal-expand {
     0% { transform:scale(.78);opacity:0; }
@@ -51,15 +56,16 @@ const introduction = {
     100% { transform:scale(1.35);opacity:0; }
   }
   @media(prefers-reduced-motion:reduce) { .signal-rings { opacity:.25; } }
-  @media(max-width:639px) { .signal-rings { width:640px;height:640px; }.signal-rings--blue { left:-420px;top:-180px; }.signal-rings--orange { right:-420px;bottom:-260px; } }
+  @media(max-width:639px) { .signal-rings { width:640px;height:640px; }.signal-rings--left { left:-420px;top:-180px; }.signal-rings--right { right:-420px;bottom:-260px; } }
   .hero-inner { display:flex;justify-content:center; }
-  .hero-copy { width:100%;max-width:1120px;text-align:center; }
+  .hero-copy { position:relative;isolation:isolate;width:100%;max-width:680px;text-align:center; }
+  .hero-copy::before { content:'';position:absolute;inset:-120px -180px;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at center,var(--bg) 0%,var(--bg) 40%,color-mix(in srgb,var(--bg) 95%,transparent) 50%,color-mix(in srgb,var(--bg) 65%,transparent) 62%,color-mix(in srgb,var(--bg) 20%,transparent) 74%,transparent 88%); }
   .hello { font-size:clamp(20px,2vw,24px);font-weight:500;line-height:1.4;color:var(--ink);margin:0 0 14px; }
   h1 { font-size:clamp(48px,5.5vw,72px);font-weight:500;line-height:1.1;letter-spacing:-.055em;margin:0 0 16px;color:#2563eb; }
   :global(html[data-theme="dark"]) h1 { color:#60a5fa; }
   .name-dot { color:var(--blue); }
   .role { font:400 clamp(21px,2.2vw,28px)/1.35 var(--font-display);letter-spacing:-.025em;color:var(--ink);margin:0 0 28px; }
-  .hero-description { max-width:1100px;margin:0 auto 32px; }
+  .hero-description { max-width:680px;margin:0 auto 32px; }
   .hero-description p { font-size:18px;line-height:1.75;color:var(--ink);margin:0;text-wrap:balance; }
   .hero-description p+p { margin-top:12px; }
   .hero-actions { display:flex;justify-content:center;align-items:center;gap:28px; }
@@ -76,3 +82,44 @@ const introduction = {
     .about-link { width:100%; }
   }
 </style>
+
+<script>
+  const hero = document.querySelector<HTMLElement>('.hero');
+  const glow = hero?.querySelector<HTMLElement>('.signal-dots--glow');
+  if (hero && glow) {
+    const media = window.matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+    const controller = new AbortController();
+    let frame = 0;
+    let clientX = 0;
+    let clientY = 0;
+    const hide = () => {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      hero.removeAttribute('data-cursor-active');
+    };
+    hero.addEventListener('pointermove', (event: PointerEvent) => {
+      if (!media.matches || event.pointerType === 'touch') return;
+      clientX = event.clientX;
+      clientY = event.clientY;
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const bounds = glow.getBoundingClientRect();
+        glow.style.setProperty('--cursor-x', `${clientX - bounds.left}px`);
+        glow.style.setProperty('--cursor-y', `${clientY - bounds.top}px`);
+        hero.setAttribute('data-cursor-active', '');
+      });
+    }, { signal: controller.signal });
+    hero.addEventListener('pointerleave', hide, { signal: controller.signal });
+    hero.addEventListener('pointercancel', hide, { signal: controller.signal });
+    window.addEventListener('blur', hide, { signal: controller.signal });
+    window.addEventListener('scroll', hide, { passive: true, signal: controller.signal });
+    media.addEventListener('change', hide, { signal: controller.signal });
+    const cleanup = () => {
+      hide();
+      controller.abort();
+    };
+    window.addEventListener('pagehide', hide, { signal: controller.signal });
+    if (import.meta.hot) import.meta.hot.dispose(cleanup);
+  }
+</script>
