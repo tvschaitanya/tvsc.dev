@@ -1,0 +1,28 @@
+---
+
+import SectionLabel from '../ui/SectionLabel.astro';
+import Button from '../ui/Button.astro';
+import SectionArtwork from '../SectionArtwork.astro';
+const blogUrl = 'https://tvschaitanya.hashnode.dev/';
+---
+<section id="blogs" class="section blogs" aria-labelledby="blogs-title">
+  <div class="wrap">
+    <SectionLabel number="04" label="Blogs" />
+    <div class="blog-content">
+      <div class="blog-copy">
+        <h2 id="blogs-title">Giving tech writing <br />a try<span class="orange">.</span></h2>
+      <div class="blog-intro">
+        <p>I’m starting to write tech blogs. You can find me on Hashnode.</p>
+        <Button href={blogUrl} external>Find me on Hashnode</Button>
+      </div>
+      </div>
+      <SectionArtwork variant="writing" />
+    </div>
+  </div>
+</section>
+<style>
+  .blog-content { display:grid;grid-template-columns:1fr 1fr;gap:8%;align-items:center; }
+  .blog-content h2 { margin:0 0 24px;font-size:clamp(40px,4.6vw,66px); }
+  .blog-intro p { color:var(--muted);font-size:18px;line-height:1.75;max-width:430px;margin:0 0 24px; }
+  @media(max-width:767px) { .blog-content { grid-template-columns:1fr;gap:28px; }.blog-content h2 { font-size:42px; }.blog-intro p { font-size:16px; } }
+</style>

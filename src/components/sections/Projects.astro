@@ -1,0 +1,91 @@
+---
+// Expand these entries when the case studies are ready.
+const projects = [
+  {
+    title: 'AI RAG chatbot for CCI',
+    category: 'AI engineering',
+    description: 'How I built a retrieval-augmented chatbot for CCI.',
+    visual: 'chatbot',
+    href: '/blogs/cci-rag-chatbot/',
+  },
+  {
+    title: 'On-premises to AWS migration plan',
+    category: 'Cloud architecture',
+    description: 'How I designed a plan to migrate on-premises infrastructure to AWS.',
+    visual: 'migration',
+    href: '/blogs/on-premises-to-aws/',
+  },
+] as const;
+import SectionLabel from '../ui/SectionLabel.astro';
+---
+<section id="projects" class="section projects" aria-labelledby="projects-title">
+  <div class="wrap">
+    <SectionLabel number="02" label="Projects" />
+    <h2 id="projects-title">Some of my work<span class="orange">.</span></h2>
+    <div class="project-grid">
+      {projects.map(project => (
+        <article class="project">
+          <div class:list={['project-visual', `visual--${project.visual}`]} aria-hidden="true">
+            {project.visual === 'chatbot' ? (
+              <svg viewBox="0 0 500 270" fill="none">
+                <path class="diagram-line" d="M152 135h60m76 0h60" />
+                <rect class="diagram-paper" x="68" y="82" width="84" height="106" rx="7" />
+                <path class="diagram-ink" d="M88 106h43m-43 17h43m-43 17h31m-31 17h35" />
+                <rect class="diagram-core" x="212" y="97" width="76" height="76" rx="15" />
+                <path class="diagram-paper-stroke" d="M235 120h30v30h-30v-30Zm7-9v9m16-9v9m-16 30v9m16-9v9m-32-32h9m-9 16h9m30-16h9m-9 16h9" />
+                <path class="diagram-paper" d="M358 92h81a10 10 0 0 1 10 10v65a10 10 0 0 1-10 10h-43l-19 17v-17h-19a10 10 0 0 1-10-10v-65a10 10 0 0 1 10-10Z" />
+                <circle class="diagram-blue" cx="377" cy="135" r="4" /><circle class="diagram-blue" cx="399" cy="135" r="4" /><circle class="diagram-blue" cx="421" cy="135" r="4" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 500 270" fill="none">
+                <rect class="diagram-paper" x="75" y="83" width="100" height="104" rx="8" />
+                <path class="diagram-ink" d="M75 117h100m-100 34h100" />
+                <circle class="diagram-blue" cx="92" cy="100" r="4" /><circle class="diagram-blue" cx="92" cy="134" r="4" /><circle class="diagram-blue" cx="92" cy="169" r="4" />
+                <path class="migration-arrow" d="M205 135h85m-17-17 17 17-17 17" />
+                <path class="diagram-cloud" d="M343 174a32 32 0 0 1-2-64 43 43 0 0 1 82-5 35 35 0 1 1 6 69h-86Z" />
+                <text class="cloud-label" x="384" y="145" text-anchor="middle">AWS</text>
+              </svg>
+            )}
+          </div>
+          <div class="project-copy">
+            <span class="project-category">{project.category}</span>
+            <h3><a href={project.href}>{project.title}</a></h3>
+            <p>{project.description}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  .projects h2 { margin-bottom:40px; }
+  .project-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px; }
+  .project { min-width:0;transition:transform 200ms var(--ease-out); }
+  .project-visual { border:2px solid var(--deep);border-radius:12px;overflow:hidden; }
+  .visual--chatbot { background:var(--blue); }
+  .visual--migration { background:var(--orange); }
+  .project-visual svg { display:block;width:100%;height:auto;transform-origin:center;transition:transform 240ms var(--ease-out); }
+  .diagram-line { stroke:var(--paper);stroke-width:2;stroke-dasharray:5 5; }
+  .diagram-paper { fill:var(--paper);stroke:var(--deep);stroke-width:2; }
+  .diagram-ink { stroke:var(--deep);stroke-width:2;stroke-linecap:round; }
+  .diagram-core { fill:var(--orange);stroke:var(--deep);stroke-width:2; }
+  .diagram-paper-stroke { stroke:var(--deep);stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
+  .diagram-blue { fill:var(--blue); }
+  .migration-arrow { stroke:var(--deep);stroke-width:3;stroke-linecap:round;stroke-linejoin:round; }
+  .diagram-cloud { fill:var(--blue);stroke:var(--deep);stroke-width:2; }
+  .cloud-label { fill:var(--paper);font:500 23px var(--font-display); }
+  .project-copy { padding-top:24px; }
+  .project-category { font:12px var(--font-mono);color:var(--muted); }
+  .project h3 { font-size:clamp(23px,2.4vw,32px);line-height:1.2;letter-spacing:-.035em;margin:12px 0; }
+  .project h3 a { text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px; }
+  .project p { font-size:16px;line-height:1.7;color:var(--muted);max-width:520px;margin:0; }
+  @media(hover:hover) and (pointer:fine) {
+    .project:hover { transform:translateY(-3px); }
+    .project:hover .project-visual svg { transform:scale(1.025); }
+  }
+  @media(prefers-reduced-motion:reduce) {
+    .project,.project-visual svg { transition:none; }
+    .project:hover,.project:hover .project-visual svg { transform:none; }
+  }
+  @media(max-width:767px) { .project-grid { grid-template-columns:1fr;gap:40px; }.projects h2 { margin-bottom:32px; }.project h3 { font-size:27px; } }
+</style>

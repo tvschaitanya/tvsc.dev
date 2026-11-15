@@ -1,0 +1,39 @@
+---
+const introduction = {
+  firstName: 'Chaitanya',
+  role: 'Cloud & AI Engineer',
+  introduction: 'I connect business needs with practical cloud and AI solutions.',
+  summary: 'Hands-on experience in development, production operations, and automation shapes how I balance cost, reliability, and complexity.',
+};
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import SystemsVisual from '../SystemsVisual.astro';
+---
+<section id="home" class="hero" data-enter aria-labelledby="hero-title">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <h1 id="hero-title"><span class="hello" data-hero-line>Hello, I’m</span> <span class="name" data-hero-line>{introduction.firstName}<span class="name-dot">.</span><svg class="name-underline" viewBox="0 0 600 30" fill="none" aria-hidden="true"><path d="M4 17C150 1 362 3 591 12M89 25c155-12 332-13 489-6" /></svg></span></h1>
+        <p class="role" data-hero-item>{introduction.role}</p>
+        <p class="lead" data-hero-item>{introduction.introduction}</p>
+        <p class="lead" data-hero-item>{introduction.summary}</p>
+        <div class="hero-actions" data-hero-item><Button href="#contact">Let’s Connect</Button><a class="about-link" href="#about">Meet the person <Icon name="down" size={18}/></a></div>
+      </div>
+      <SystemsVisual />
+    </div>
+  </div>
+</section>
+<style>
+  .hero { min-height:100svh;padding:calc(var(--nav-height) + 40px) 0 24px;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;background-position:center;position:relative;isolation:isolate; }
+  .hero:before { content:'';position:absolute;inset:0;background:color-mix(in srgb,var(--bg) 88%,transparent);z-index:-1; }
+  .hero>.wrap { min-height:calc(100svh - var(--nav-height) - 64px);display:flex;flex-direction:column;justify-content:center; }
+  
+  .hero-grid { display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:64px;align-items:center;padding-block:32px; }
+  h1 { font-weight:600;line-height:1;letter-spacing:-.065em;margin:0 0 36px; }.hello { display:block;font-size:clamp(30px,3.5vw,48px);font-weight:400;letter-spacing:-.04em;margin-bottom:8px; }.name { display:inline-block;position:relative;font-size:clamp(66px,8.5vw,124px); }.name-dot { color:var(--orange); }.name-underline { position:absolute;width:100%;height:26px;bottom:-17px;left:0;stroke:var(--blue);stroke-width:5;stroke-linecap:round; }
+  .role { display:flex;align-items:center;gap:24px;font-size:clamp(22px,2.4vw,33px);font-family:var(--font-display);font-weight:500;letter-spacing:-.035em;margin-bottom:24px; }.lead { max-width:465px;font-size:21px;line-height:1.5;margin-bottom:16px; }.hero-actions { display:flex;align-items:center;gap:28px; }.about-link { display:flex;align-items:center;gap:12px;font-size:14px;min-height:44px; }.about-link :global(svg) { color:var(--orange);transition:transform 160ms var(--ease-out); }
+  
+  @media(hover:hover) and (pointer:fine) { .about-link:hover :global(svg) { transform:translateY(3px); } }
+  @media(max-width:1100px) { .hero-grid { gap:40px;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); }.hero-actions { gap:20px; }.about-link { font-size:13px; }.lead { font-size:20px; } }
+  @media(max-width:767px) { .hero-grid { grid-template-columns:1fr;gap:48px;padding-block:24px; }.hero-copy { max-width:600px; }.name { font-size:clamp(64px,12vw,98px); }.lead, }
+  @media(max-width:639px) { .hero { padding-top:calc(var(--nav-height) + 28px);background-size:40px 40px; }.hello { font-size:32px; }.name { font-size:clamp(54px,13vw,80px); }.name-underline { bottom:-14px;stroke-width:5; }.role { font-size:25px;gap:16px;margin-bottom:24px; }.lead { font-size:20px; }.hero-actions { flex-direction:column;align-items:stretch;gap:16px; }.about-link { justify-content:center;font-size:14px; } }
+</style>

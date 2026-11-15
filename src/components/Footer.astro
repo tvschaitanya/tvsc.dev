@@ -1,0 +1,101 @@
+---
+const contact = {
+  siteName: "Chaitanya's Portfolio",
+  email: 'tvschaitanya@outlook.com',
+  description: 'I’m open to opportunities in cloud and AI, thoughtful conversations, and learning from others. Feel free to say hello.',
+};
+const socialLinks = [
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tvschaitanya' },
+  { label: 'GitHub', href: 'https://github.com/tvschaitanya' },
+  { label: 'Hashnode', href: 'https://tvschaitanya.hashnode.dev/' },
+];
+import SectionLabel from './ui/SectionLabel.astro';
+import Icon from './ui/Icon.astro';
+import SectionArtwork from './SectionArtwork.astro';
+---
+<footer id="contact" aria-labelledby="contact-title">
+  <div class="section closing">
+  <div class="wrap">
+    <SectionLabel number="05" label="Contact" />
+    <div class="contact-layout">
+    <div class="contact-content">
+      <h2 id="contact-title">Let’s connect<span class="accent">.</span></h2>
+      <p class="contact-description">{contact.description}</p>
+      <a class="email-link" href={`mailto:${contact.email}`}>
+        <span>Email</span>
+        <Icon size={24} />
+      </a>
+      <nav class="social-links" aria-label="Social profiles">
+        {socialLinks.map(link => (
+          <a href={link.href} target="_blank" rel="noopener noreferrer">
+            <span>{link.label}</span>
+            <Icon size={16} />
+          </a>
+        ))}
+      </nav>
+    </div>
+      <SectionArtwork variant="contact" />
+    </div>
+  </div>
+  </div>
+  <div class="footer-base">
+    <div class="wrap footer-bottom">
+      <span>{contact.siteName} <span class="copyright">© 2026</span></span>
+      <a class="back-to-top" href="#home" aria-label="Back to top" title="Back to top"><span aria-hidden="true">↑</span></a>
+    </div>
+  </div>
+</footer>
+<script>
+  const backToTop = document.querySelector<HTMLAnchorElement>('.back-to-top');
+  backToTop?.addEventListener('click', event => {
+    // Keep native behavior for modified clicks and alternate navigation.
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    history.pushState(null, '', '#home');
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+    });
+  });
+</script>
+<style>
+  .closing {
+    background:var(--blue);
+    color:var(--paper);
+    --ink:var(--paper);
+    --accent:var(--orange);
+    --muted:color-mix(in srgb,var(--paper) 82%,var(--blue));
+    --line:color-mix(in srgb,var(--paper) 35%,transparent);
+    padding-bottom:88px;
+  }
+  .contact-layout { display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:64px;align-items:center; }
+  .contact-content { max-width:680px;min-width:0; }
+  .closing h2 { font-size:clamp(52px,6.5vw,88px);letter-spacing:-.055em;line-height:1.05;margin:0 0 24px; }
+  .contact-description { max-width:560px;font-size:18px;line-height:1.75;color:var(--muted);margin:0 0 32px; }
+  .email-link { display:inline-flex;align-items:center;gap:20px;min-height:48px;padding:8px 0;border-bottom:1px solid var(--paper);font-size:clamp(18px,2.2vw,28px);letter-spacing:-.025em; }
+  .email-link :global(svg) { color:var(--orange);flex-shrink:0;transition:transform 160ms var(--ease-out); }
+  .social-links { display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:24px; }
+  .social-links a { display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:15px; }
+  .social-links :global(svg) { color:var(--orange);transition:transform 160ms var(--ease-out); }
+  .footer-base { background:var(--bg);color:var(--muted);border-top:1px solid var(--line); }
+  .footer-bottom { position:relative;display:flex;align-items:center;justify-content:center;min-height:96px;padding-block:24px;font-size:12px;text-align:center; }
+  .copyright { margin-left:16px; }
+  .back-to-top { position:absolute;right:0;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:48px;height:48px;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--ink);font-size:24px; }
+  .back-to-top span { transition:transform 160ms var(--ease-out); }
+  @media(hover:hover) and (pointer:fine) {
+    .social-links a:hover :global(svg),.email-link:hover :global(svg) { transform:translate(2px,-2px); }
+    .back-to-top:hover span { transform:translateY(-3px); }
+  }
+  @media(max-width:767px) { .contact-layout { grid-template-columns:1fr;gap:40px; } }
+  @media(max-width:639px) {
+    .closing h2 { font-size:clamp(44px,11.5vw,64px); }
+    .contact-description { font-size:16px;margin-bottom:24px; }
+        .email-link { font-size:clamp(16px,4.8vw,22px);gap:12px; }
+    .email-link :global(svg) { width:20px;height:20px; }
+    .social-links { gap:8px 20px; }
+    .footer-bottom { flex-direction:column;gap:20px;padding-block:24px; }
+    .copyright { display:block;margin:8px 0 0; }
+    .back-to-top { position:static;transform:none; }
+  }
+</style>

@@ -1,0 +1,77 @@
+---
+interface Props { variant: 'writing' | 'contact'; }
+const { variant } = Astro.props;
+---
+<div class:list={['section-artwork', `artwork--${variant}`]} data-section-artwork aria-hidden="true">
+  {variant === 'writing' ? (
+    <svg viewBox="0 0 460 370" fill="none">
+      <circle class="art-orbit" cx="240" cy="184" r="151" />
+      <circle class="accent-dot" cx="382" cy="133" r="9" />
+      <circle class="blue-dot" cx="89" cy="246" r="5" />
+      <rect class="paper-shadow" x="115" y="57" width="226" height="282" rx="12" />
+      <g class="paper-sheet">
+        <rect class="paper" x="104" y="46" width="226" height="282" rx="12" />
+        <path class="paper-rule" d="M104 94h226" />
+        <circle class="blue-dot" cx="126" cy="71" r="4" />
+        <circle class="accent-dot" cx="141" cy="71" r="4" />
+        <path class="brackets" d="m152 132-15 14 15 14m37-28 15 14-15 14m-17-34-8 40" />
+        <rect class="writing-line line-one" x="136" y="191" width="159" height="7" rx="3.5" />
+        <rect class="writing-line line-two" x="136" y="213" width="133" height="7" rx="3.5" />
+        <rect class="writing-line line-three" x="136" y="235" width="151" height="7" rx="3.5" />
+        <rect class="writing-line line-four" x="136" y="257" width="95" height="7" rx="3.5" />
+        <path class="paper-rule" d="M136 294h45" />
+      </g>
+      <g class="pencil">
+        <path class="pencil-body" d="m307 123 20-17 64 77-20 17-64-77Z" />
+        <path class="pencil-tip" d="m371 200 26 14-6-31-20 17Z" />
+        <path class="pencil-edge" d="m318 115 64 77m-68-60 20-17" />
+        <path class="pencil-lead" d="m389 210 8 4-2-10" />
+      </g>
+      <path class="art-flourish" d="M47 123c-10-36 31-65 51-41m-14-3 14 3-5 15" />
+    </svg>
+  ) : (
+    <svg viewBox="0 0 460 370" fill="none">
+      <circle class="art-orbit" cx="233" cy="191" r="147" />
+      <path class="message-trail" d="M63 258c-38-72 26-166 104-160m172 194c46-5 61-38 55-67" />
+      <circle class="accent-dot" cx="81" cy="100" r="7" />
+      <circle class="paper-dot" cx="386" cy="272" r="5" />
+      <g class="envelope">
+        <rect class="envelope-shadow" x="113" y="154" width="250" height="161" rx="12" />
+        <rect class="envelope-body" x="103" y="144" width="250" height="161" rx="12" />
+        <path class="envelope-seam" d="m108 299 88-83m152 83-88-83" />
+        <path class="envelope-fold" d="m105 151 112 83a19 19 0 0 0 23 0l111-83" />
+      </g>
+      <g class="hello-bubble">
+        <path class="bubble-shadow" d="M176 54h154a12 12 0 0 1 12 12v76a12 12 0 0 1-12 12h-66l-26 24v-24h-62a12 12 0 0 1-12-12V66a12 12 0 0 1 12-12Z" />
+        <path class="bubble-body" d="M166 44h154a12 12 0 0 1 12 12v76a12 12 0 0 1-12 12h-66l-26 24v-24h-62a12 12 0 0 1-12-12V56a12 12 0 0 1 12-12Z" />
+        <text x="243" y="111" text-anchor="middle" class="hello-text">hello.</text>
+      </g>
+      <g class="reply-bubble">
+        <path class="reply-body" d="M59 190h84a11 11 0 0 1 11 11v42a11 11 0 0 1-11 11h-38l-19 17v-17H59a11 11 0 0 1-11-11v-42a11 11 0 0 1 11-11Z" />
+        <circle class="reply-dot dot-one" cx="78" cy="222" r="4" />
+        <circle class="reply-dot dot-two" cx="101" cy="222" r="4" />
+        <circle class="reply-dot dot-three" cx="124" cy="222" r="4" />
+      </g>
+    </svg>
+  )}
+</div>
+<script>
+  import { initArtworkMotion } from '../scripts/artwork-motion';
+  initArtworkMotion();
+</script>
+<style>
+  .section-artwork { width:100%;max-width:440px;justify-self:end; }
+  svg { display:block;width:100%;height:auto;overflow:visible; }
+  .art-orbit { stroke:var(--line);stroke-width:1;stroke-dasharray:4 9; }
+  .accent-dot { fill:var(--orange); }.blue-dot { fill:var(--blue); }.paper-dot { fill:var(--paper); }
+  .paper-shadow { fill:var(--blue); }.paper { fill:var(--paper);stroke:var(--deep);stroke-width:2; }
+  .paper-rule { stroke:var(--deep);stroke-width:1;opacity:.3; }.brackets { stroke:var(--blue);stroke-width:4;stroke-linecap:round;stroke-linejoin:round; }
+  .writing-line { fill:var(--deep);opacity:.25;transform-box:fill-box;transform-origin:left center; }
+  .pencil-body { fill:var(--orange);stroke:var(--deep);stroke-width:2; }.pencil-tip { fill:var(--paper);stroke:var(--deep);stroke-width:2; }.pencil-edge { stroke:var(--deep);stroke-width:2; }.pencil-lead { fill:var(--deep); }
+  .art-flourish { stroke:var(--orange);stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
+  .message-trail { stroke:var(--paper);stroke-width:1.5;stroke-dasharray:4 7;opacity:.5; }
+  .envelope-shadow,.bubble-shadow { fill:var(--deep); }.envelope-body { fill:var(--paper);stroke:var(--deep);stroke-width:2; }.envelope-seam { stroke:var(--deep);stroke-width:2;opacity:.3; }.envelope-fold { stroke:var(--deep);stroke-width:2; }
+  .bubble-body { fill:var(--orange);stroke:var(--deep);stroke-width:2; }.hello-text { fill:var(--deep);font:600 46px var(--font-display);letter-spacing:-2px; }
+  .reply-body { fill:var(--blue);stroke:var(--paper);stroke-width:2; }.reply-dot { fill:var(--paper);transform-box:fill-box;transform-origin:center; }
+  @media(max-width:767px) { .section-artwork { max-width:340px;justify-self:center; } }
+</style>

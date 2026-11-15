@@ -1,0 +1,17 @@
+---
+interface Props { name?: string; size?: number; class?: string; }
+const { name = 'arrow', size = 24, class: className } = Astro.props;
+const paths: Record<string, string> = {
+  arrow: 'M5 19 19 5M5 5h14v14',
+  down: 'M12 4v16M5 13l7 7 7-7',
+  cloud: 'M7 18a5 5 0 1 1 .6-9.96A6 6 0 0 1 19 10a4 4 0 0 1-1 8H7Z',
+  chip: 'M7 7h10v10H7V7ZM9 2v5m6-5v5M9 17v5m6-5v5M2 9h5m-5 6h5m10-6h5m-5 6h5',
+  box: 'm12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10M7.5 4.5l9 5',
+  code: 'm8 6-6 6 6 6M16 6l6 6-6 6M14 3l-4 18',
+  database: 'M21 5c0 2-4 3-9 3S3 7 3 5s4-3 9-3 9 1 9 3ZM3 5v14c0 2 4 3 9 3s9-1 9-3V5M3 12c0 2 4 3 9 3s9-1 9-3',
+  activity: 'M2 12h5l3-9 4 18 3-9h5',
+  sun: 'M12 3V1M12 23v-2M3 12H1M23 12h-2M4.2 4.2 2.8 2.8m18.4 18.4-1.4-1.4M4.2 19.8l-1.4 1.4M21.2 2.8l-1.4 1.4M17 12a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z',
+  moon: 'M21 13a9 9 0 0 1-10-10A9 9 0 1 0 21 13Z',
+};
+---
+<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class={className} aria-hidden="true"><path d={paths[name] || paths.arrow} /></svg>

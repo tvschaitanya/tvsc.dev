@@ -1,0 +1,98 @@
+---
+// A conceptual cloud/AI workbench, not an architecture claimed for a specific project.
+---
+<div class="systems-visual" data-systems-visual data-hero-art>
+  <svg viewBox="0 0 520 500" role="img" aria-labelledby="systems-title systems-description">
+    <title id="systems-title">Cloud, applications, data, and AI working together</title>
+    <desc id="systems-description">An isometric infrastructure platform connects a cloud to an application, a database, and an AI processor. Small signals briefly travel between them.</desc>
+    <defs>
+      <pattern id="systems-grid" width="28" height="16" patternUnits="userSpaceOnUse" patternTransform="skewY(-30)"><path d="M28 0H0v16" fill="none" class="grid-line" /></pattern>
+    </defs>
+    <ellipse class="ground-shadow" cx="260" cy="391" rx="193" ry="33" />
+    <path class="platform-edge" d="m38 299 222 123 222-123v19L260 442 38 318v-19Z" />
+    <path class="platform" d="m260 175 222 124-222 123L38 299l222-124Z" />
+    <path class="platform-grid" d="m260 175 222 124-222 123L38 299l222-124Z" />
+    <path class="board-rule" d="m71 299 189 105 190-105M260 194v18" />
+
+    <g class="routes" fill="none">
+      <path data-signal-path="cloud" d="M260 141v91" />
+      <path data-signal-path="data" d="M260 277v21l-139 0" />
+      <path data-signal-path="ai" d="M260 277v21h140" />
+      <path d="m132 331 128 71 128-71" class="secondary-route" />
+    </g>
+
+    <g class="cloud-object">
+      <path class="cloud-back" d="M207 123a28 28 0 0 1-5-55 43 43 0 0 1 82-9 33 33 0 1 1 28 64H207Z" />
+      <path class="cloud-front" d="M198 114a28 28 0 0 1-5-55 43 43 0 0 1 82-9 33 33 0 1 1 28 64H198Z" />
+      <path class="cloud-detail" d="m239 75 14-14 14 14m-14-14v31" />
+    </g>
+    <text class="visual-label" x="260" y="161">Cloud</text>
+
+    <g class="application-object">
+      <path class="app-left" d="m191 243 69 39v44l-69-39v-44Z" />
+      <path class="app-right" d="m260 282 69-39v44l-69 39v-44Z" />
+      <path class="app-top" d="m260 204 69 39-69 39-69-39 69-39Z" />
+      <path class="app-symbol" d="m240 237-9 6 9 5m40-11 9 6-9 5m-15-16-10 22" />
+      <path class="app-indicator" d="m204 274 20 11m-20-1 11 6" />
+    </g>
+
+    <g class="database-object">
+      <path class="database-body" d="M78 264v58c0 13 70 13 70 0v-58" />
+      <ellipse class="database-top" cx="113" cy="264" rx="35" ry="13" />
+      <path class="database-seam" d="M78 283c0 13 70 13 70 0m-70 19c0 13 70 13 70 0" />
+      <circle class="database-light" cx="127" cy="318" r="3" />
+    </g>
+
+    <g class="ai-object">
+      <path class="chip-pins" d="m374 270-15-8m26 2-15-8m26 2-15-8m44 28 15 8m-26-2 15 8m-26-2 15 8m-43 19-14 8m3-14-14 8m3-14-14 8m44-40 14-8m-3 14 14-8m-3 14 14-8" />
+      <path class="chip-side" d="m366 284 43 24 43-24v16l-43 24-43-24v-16Z" />
+      <path class="chip-top" d="m409 260 43 24-43 24-43-24 43-24Z" />
+      <text class="chip-label" x="408" y="291">AI</text>
+    </g>
+
+    <text class="board-label" x="113" y="359">Data</text>
+    <text class="board-label" x="409" y="359">AI systems</text>
+    <text class="board-label" x="260" y="379">Application</text>
+    <circle class="board-dot" cx="260" cy="402" r="4" />
+    <g class="signals" aria-hidden="true">
+      <circle data-signal="cloud" cx="0" cy="0" r="5" />
+      <circle data-signal="data" cx="0" cy="0" r="5" />
+      <circle data-signal="ai" cx="0" cy="0" r="5" />
+    </g>
+  </svg>
+</div>
+<script>
+  import { initSystemsVisual } from '../scripts/systems-visual';
+  initSystemsVisual();
+</script>
+<style>
+  .systems-visual { width:100%;max-width:540px;justify-self:center; }
+  svg { display:block;width:100%;height:auto;overflow:visible; }
+  .ground-shadow { fill:var(--blue);opacity:.09; }
+  .platform { fill:var(--surface);stroke:var(--ink);stroke-width:1.5; }
+  .platform-edge { fill:var(--blue);stroke:var(--deep);stroke-width:1.5; }
+  .platform-grid { fill:url(#systems-grid);opacity:.35; }.grid-line { stroke:var(--line);stroke-width:.75; }
+  .board-rule { fill:none;stroke:var(--line);stroke-width:1; }
+  .routes { stroke:var(--orange);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round; }
+  .secondary-route { stroke:var(--blue);stroke-width:1.5;stroke-dasharray:4 6;opacity:.6; }
+  .cloud-back { fill:var(--blue);stroke:var(--deep);stroke-width:2; }
+  .cloud-front { fill:var(--paper);stroke:var(--deep);stroke-width:2; }
+  .cloud-detail { fill:none;stroke:var(--blue);stroke-width:3;stroke-linecap:round;stroke-linejoin:round; }
+  .visual-label,.board-label { text-anchor:middle;font:400 21px var(--font-display);fill:var(--ink);letter-spacing:-.4px; }
+  .app-left { fill:var(--blue);stroke:var(--deep);stroke-width:2; }
+  .app-right { fill:color-mix(in srgb,var(--blue) 75%,var(--deep));stroke:var(--deep);stroke-width:2; }
+  .app-top { fill:var(--paper);stroke:var(--deep);stroke-width:2; }
+  .app-symbol { stroke:var(--blue);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;fill:none; }
+  .app-indicator { stroke:var(--orange);stroke-width:3;stroke-linecap:round;fill:none; }
+  .database-body { fill:var(--blue);stroke:var(--deep);stroke-width:2; }
+  .database-top { fill:var(--paper);stroke:var(--deep);stroke-width:2; }
+  .database-seam { fill:none;stroke:var(--paper);stroke-width:1.5; }.database-light { fill:var(--orange); }
+  .chip-pins { fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round; }
+  .chip-side { fill:var(--blue);stroke:var(--deep);stroke-width:2; }
+  .chip-top { fill:var(--orange);stroke:var(--deep);stroke-width:2; }
+  .chip-label { text-anchor:middle;fill:var(--deep);font:600 18px var(--font-display); }
+  .board-dot { fill:var(--orange); }
+  .signals { fill:var(--orange);stroke:var(--paper);stroke-width:1.5; }
+  .signals circle { opacity:0; }
+  @media(max-width:767px) { .systems-visual { max-width:460px; } }
+</style>

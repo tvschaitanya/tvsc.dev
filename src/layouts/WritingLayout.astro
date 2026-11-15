@@ -1,0 +1,35 @@
+---
+import '../styles/global.css';
+interface Props { title: string; }
+const { title } = Astro.props;
+---
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} — Chaitanya’s Portfolio</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400..700&family=Funnel+Sans:wght@400..600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <script is:inline>
+      try {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <main class="wrap writing-page">
+      <a class="back-link" href="/#projects">← Back to portfolio</a>
+      <h1>{title}</h1>
+      <slot />
+    </main>
+  </body>
+</html>
+<style>
+  .writing-page { padding-block:64px 96px;max-width:1000px; }
+  .back-link { display:inline-flex;align-items:center;min-height:44px;font-size:14px;color:var(--muted);margin-bottom:48px; }
+  h1 { font-size:clamp(40px,6vw,76px);line-height:1.08;letter-spacing:-.05em;margin:0;max-width:18ch; }
+</style>

@@ -1,43 +1,73 @@
-# Astro Starter Kit: Minimal
+# Chaitanya’s Portfolio
+
+A single-page Astro portfolio with reusable components, two color themes, and GSAP motion.
+
+## Development
+
+Use pnpm to keep the lockfile consistent:
 
 ```sh
-pnpm create astro@latest -- --template minimal
+pnpm install
+pnpm dev --background
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Manage the background server with:
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```sh
+pnpm astro dev status
+pnpm astro dev logs
+pnpm astro dev stop
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Checks and build
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```sh
+pnpm check
+pnpm build
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+The static site is generated in `dist/`.
 
-## 🧞 Commands
+## Where to make changes
 
-All commands are run from the root of the project, from a terminal:
+| File or directory | Responsibility |
+| --- | --- |
+| Each section’s `.astro` frontmatter | That section’s copy, links, and lists |
+| `src/pages/index.astro` | Section order and page composition |
+| `src/layouts/BaseLayout.astro` | Shared HTML shell, metadata, font loading, header, and footer |
+| `src/components/sections/` | Hero, About, Projects, Skills, and Blogs sections with scoped styles |
+| `src/components/Header.astro` | Responsive navigation |
+| `src/components/Footer.astro` | Contact section, email, social links, and footer |
+| `src/components/ThemeToggle.astro` | Accessible light/dark theme controls |
+| `src/components/ui/` | Reusable button, icon, and section label |
+| `src/styles/global.css` | Theme tokens, typography, spacing, shared page primitives |
+| `src/scripts/` | Separate theme, navigation, and GSAP motion modules |
+| `src/components/SystemsVisual.astro` | Isometric cloud, application, data, and AI illustration |
+| `DESIGN.md` | Visual direction, motion decisions, and maintenance notes |
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+Each section owns its scoped CSS. Shared colors and fonts are changed through the tokens in `global.css`.
 
-## 👀 Want to learn more?
+## Design and interaction
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+A single blue/orange complementary palette powers both themes. Change its four base colors in `src/styles/global.css`; theme-specific surfaces derive from those colors.
+
+The hero uses a short GSAP entrance. The hero workbench uses `systems-visual.ts` for three short signal passes, then rests. Hover motion is limited to precise pointers, and reduced-motion preferences disable spatial effects. Reading content stays still while scrolling.
+
+All biography and contact information comes from the supplied content. The Blogs section links directly to Hashnode; it does not invent article titles or publication dates.
+
+Manual testing and running the dev server are handled by the owner. No tests or builds were run for the blue/orange redesign, as requested.
+
+## Editing section content
+
+Content lives at the top of the component that renders it, inside its Astro frontmatter (`---`):
+
+- `Hero.astro`: name, role, and introduction.
+- `About.astro`: biography and portrait path.
+- `Projects.astro`: project entries.
+- `Skills.astro`: skill descriptions and tool lists.
+- `Blogs.astro`: Hashnode URL; the short copy is in its markup.
+- `Footer.astro`: contact description, email, and social links.
+- `Header.astro`: site name and navigation items.
+- `BaseLayout.astro`: page title and social metadata.
+
+There is no central content file. If you change a repeated identity detail such as your name, also update the header, footer, and page metadata where appropriate.

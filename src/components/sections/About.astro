@@ -1,0 +1,36 @@
+---
+const biography = [
+    'I’m Chaitanya Tatikonda, a software engineer with a master’s in Information Technology from Florida State University. I’ve always been driven by a simple question: how does this actually work under the hood?',
+    'That curiosity has taken me from application development to production operations, infrastructure, and automation. I especially enjoy system design: connecting the pieces, exploring tradeoffs, and figuring out how applications and infrastructure can work together to meet real needs.',
+    'Today, I’m focused on cloud and AI. I bring technical and non-technical perspectives together to turn ideas into practical systems, balancing cost, reliability, and complexity so teams can build on a foundation they trust.',
+  ];
+import SectionLabel from '../ui/SectionLabel.astro';
+import Portrait from '../Portrait.astro';
+
+// Put your photo in public/images/portrait.jpg, then change this to '/images/portrait.jpg'.
+const portraitSrc: string | undefined = undefined;
+---
+<section id="about" class="section about" aria-labelledby="about-title">
+  <div class="wrap">
+    <SectionLabel number="01" label="About" note="The person behind the systems" />
+    <div class="about-grid">
+      <div class="about-story">
+        <h2 id="about-title">Curiosity <br />comes first<span class="orange">.</span></h2>
+        {biography.map(paragraph => <p>{paragraph}</p>)}
+      </div>
+      <div class="about-portrait">
+        <Portrait src={portraitSrc} />
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .about { background:color-mix(in srgb,var(--blue) 9%,var(--bg));--surface:color-mix(in srgb,var(--blue) 14%,var(--bg)); }
+  .about-grid { display:grid;grid-template-columns:1.1fr 1fr;gap:12%;align-items:start; }
+  .about-story h2 { margin-bottom:32px; }
+  .about-story p { color:var(--muted);font-size:16px;line-height:1.75;margin-bottom:20px;max-width:560px; }
+  .about-story p:last-child { margin-bottom:0; }
+  .about-portrait { min-width:0; }
+  @media(max-width:1023px) { .about-grid { gap:48px; } }
+  @media(max-width:639px) { .about-grid { grid-template-columns:1fr;gap:40px; }.about-story h2 br { display:none; } }
+</style>
