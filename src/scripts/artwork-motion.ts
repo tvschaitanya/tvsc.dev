@@ -22,9 +22,9 @@ export function initArtworkMotion() {
             scaleX:.05,opacity:0,transformOrigin:'left center',
             stagger:{each:.12,ease:'power1.out'},duration:.45,
           },'write')
-          .from(select('.pencil'),{x:10,y:-10,opacity:0,duration:.65},'write')
-          .to(select('.pencil'),{x:5,y:5,duration:.22,ease:'sine.inOut'},.25)
-          .to(select('.pencil'),{x:0,y:0,duration:.3,ease:'power2.out'},.47);
+          .from(select('.pencil'),{x:6,y:-8,opacity:0,duration:.5},'write')
+          .to(select('.pencil'),{x:3,y:-2,duration:.22,ease:'sine.inOut'},.5)
+          .to(select('.pencil'),{x:0,y:0,duration:.3,ease:'power2.out'},.72);
       } else {
         timeline.addLabel('hello',0)
           .from(select('.hello-bubble'),{y:14,opacity:0,duration:.55},'hello')

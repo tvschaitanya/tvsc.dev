@@ -42,7 +42,7 @@ The static site is generated in `dist/`.
 | `src/components/ui/` | Reusable button, icon, and section label |
 | `src/styles/global.css` | Theme tokens, typography, spacing, shared page primitives |
 | `src/scripts/` | Separate theme, navigation, and GSAP motion modules |
-| `src/components/SystemsVisual.astro` | Isometric cloud, application, data, and AI illustration |
+| `src/components/sections/Hero.astro` | Centered introduction, typography, background, and calls to action |
 | `DESIGN.md` | Visual direction, motion decisions, and maintenance notes |
 
 Each section owns its scoped CSS. Shared colors and fonts are changed through the tokens in `global.css`.
@@ -51,11 +51,11 @@ Each section owns its scoped CSS. Shared colors and fonts are changed through th
 
 A single blue/orange complementary palette powers both themes. Change its four base colors in `src/styles/global.css`; theme-specific surfaces derive from those colors.
 
-The hero uses a short GSAP entrance. The hero workbench uses `systems-visual.ts` for three short signal passes, then rests. Hover motion is limited to precise pointers, and reduced-motion preferences disable spatial effects. Reading content stays still while scrolling.
+The hero uses a short GSAP entrance. The hero is a centered typographic composition. `src/scripts/motion.ts` coordinates its short text entrance and underline animation. It has no canvas or 3D scene. Hover motion is limited to precise pointers, and reduced-motion preferences disable spatial effects. Reading content stays still while scrolling.
 
 All biography and contact information comes from the supplied content. The Blogs section links directly to Hashnode; it does not invent article titles or publication dates.
 
-Manual testing and running the dev server are handled by the owner. No tests or builds were run for the blue/orange redesign, as requested.
+Manual testing and running the dev server are handled by the owner. No tests or builds were run for the previous redesign, as requested.
 
 ## Editing section content
 

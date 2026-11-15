@@ -5,8 +5,8 @@ const { variant } = Astro.props;
 <div class:list={['section-artwork', `artwork--${variant}`]} data-section-artwork aria-hidden="true">
   {variant === 'writing' ? (
     <svg viewBox="0 0 460 370" fill="none">
-      <circle class="art-orbit" cx="240" cy="184" r="151" />
-      <circle class="accent-dot" cx="382" cy="133" r="9" />
+      <circle class="art-orbit" cx="230" cy="185" r="151" />
+      <circle class="accent-dot" cx="382" cy="133" r="6" />
       <circle class="blue-dot" cx="89" cy="246" r="5" />
       <rect class="paper-shadow" x="115" y="57" width="226" height="282" rx="12" />
       <g class="paper-sheet">
@@ -21,13 +21,16 @@ const { variant } = Astro.props;
         <rect class="writing-line line-four" x="136" y="257" width="95" height="7" rx="3.5" />
         <path class="paper-rule" d="M136 294h45" />
       </g>
+      <path class="art-flourish" d="M68 126C70 104 80 84 97 70m-12 1 12-1-2 12" />
       <g class="pencil">
-        <path class="pencil-body" d="m307 123 20-17 64 77-20 17-64-77Z" />
-        <path class="pencil-tip" d="m371 200 26 14-6-31-20 17Z" />
-        <path class="pencil-edge" d="m318 115 64 77m-68-60 20-17" />
-        <path class="pencil-lead" d="m389 210 8 4-2-10" />
+        <g transform="rotate(35 279 258)">
+          <path class="pencil-eraser" d="M270 143v-15a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v15Z" />
+          <path class="pencil-body" d="M270 143h18v92h-18Z" />
+          <path class="pencil-tip" d="m270 235 9 23 9-23Z" />
+          <path class="pencil-edge" d="M279 150v79m-9-79h18" />
+          <path class="pencil-lead" d="m275.9 250 3.1 8 3.1-8Z" />
+        </g>
       </g>
-      <path class="art-flourish" d="M47 123c-10-36 31-65 51-41m-14-3 14 3-5 15" />
     </svg>
   ) : (
     <svg viewBox="0 0 460 370" fill="none">
@@ -67,7 +70,7 @@ const { variant } = Astro.props;
   .paper-shadow { fill:var(--blue); }.paper { fill:var(--paper);stroke:var(--deep);stroke-width:2; }
   .paper-rule { stroke:var(--deep);stroke-width:1;opacity:.3; }.brackets { stroke:var(--blue);stroke-width:4;stroke-linecap:round;stroke-linejoin:round; }
   .writing-line { fill:var(--deep);opacity:.25;transform-box:fill-box;transform-origin:left center; }
-  .pencil-body { fill:var(--orange);stroke:var(--deep);stroke-width:2; }.pencil-tip { fill:var(--paper);stroke:var(--deep);stroke-width:2; }.pencil-edge { stroke:var(--deep);stroke-width:2; }.pencil-lead { fill:var(--deep); }
+  .pencil-eraser { fill:var(--paper);stroke:var(--deep);stroke-width:2; }.pencil-body { fill:var(--orange);stroke:var(--deep);stroke-width:2; }.pencil-tip { fill:var(--paper);stroke:var(--deep);stroke-width:2; }.pencil-edge { stroke:var(--deep);stroke-width:1.5;stroke-linecap:round;opacity:.45; }.pencil-lead { fill:var(--deep); }
   .art-flourish { stroke:var(--orange);stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
   .message-trail { stroke:var(--paper);stroke-width:1.5;stroke-dasharray:4 7;opacity:.5; }
   .envelope-shadow,.bubble-shadow { fill:var(--deep); }.envelope-body { fill:var(--paper);stroke:var(--deep);stroke-width:2; }.envelope-seam { stroke:var(--deep);stroke-width:2;opacity:.3; }.envelope-fold { stroke:var(--deep);stroke-width:2; }
