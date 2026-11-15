@@ -11,8 +11,9 @@ const introduction = {
 ---
 <section id="home" class="hero" data-enter aria-labelledby="hero-title">
   <div class="hero-atmosphere" aria-hidden="true">
-    <div class="ambient-grid"></div>
-    <div class="grid-pattern-glow"></div>
+    <div class="signal-dots"></div>
+    <div class="signal-rings signal-rings--blue"></div>
+    <div class="signal-rings signal-rings--orange"></div>
   </div>
   <div class="wrap hero-inner">
     <div class="hero-copy">
@@ -33,29 +34,24 @@ const introduction = {
 <style>
   .hero { position:relative;isolation:isolate;overflow:hidden;background:var(--bg);padding:calc(var(--nav-height) + 136px) 0 152px; }
   .hero-atmosphere { position:absolute;inset:0;z-index:-1;pointer-events:none; }
-  .ambient-grid { position:absolute;inset:0;background-image:linear-gradient(color-mix(in srgb,var(--ink) 11%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--ink) 11%,transparent) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse at center,transparent 4%,black 85%); }
-  .grid-pattern-glow {
-    position:absolute;inset:0;
-    background-image:linear-gradient(color-mix(in srgb,var(--blue) 85%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--blue) 85%,transparent) 1px,transparent 1px);
-    background-size:56px 56px;
-    mask-image:repeating-linear-gradient(135deg,transparent 0px,transparent 70px,rgba(0,0,0,.25) 100px,black 150px,black 190px,rgba(0,0,0,.25) 240px,transparent 280px,transparent 336px);
-    mask-size:475px 475px;
-    mask-repeat:repeat;
-    filter:drop-shadow(0 0 4px var(--blue));
-    opacity:.6;
-  }
-  .hero-atmosphere { mask-image:radial-gradient(ellipse at center,rgba(0,0,0,.1) 10%,rgba(0,0,0,.5) 45%,black 85%); }
+  .hero-atmosphere { mask-image:radial-gradient(ellipse at center,transparent 12%,rgba(0,0,0,.4) 48%,black 90%); }
+  .signal-dots { position:absolute;inset:-48px;background-image:radial-gradient(circle,color-mix(in srgb,var(--ink) 22%,transparent) 1px,transparent 1.5px);background-size:32px 32px; }
+  .signal-rings { position:absolute;width:900px;height:900px;border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 63px,currentColor 64px 65px,transparent 67px 96px);opacity:.4;transform-origin:center; }
+  .signal-rings--blue { color:var(--blue);left:-430px;top:-280px; }
+  .signal-rings--orange { color:var(--orange);right:-470px;bottom:-430px; }
   @media(prefers-reduced-motion:no-preference) {
-    .grid-pattern-glow { animation:grid-wave 8s linear 3; }
+
+    .signal-rings { opacity:0;animation:signal-expand 2.4s cubic-bezier(.37,0,.63,1) 1 both; }
+    .signal-rings--orange { animation-delay:2.4s; }
   }
-  @keyframes grid-wave {
-    0% { mask-position:0 0;opacity:.35; }
-    25% { opacity:.9; }
-    50% { opacity:.65; }
-    75% { opacity:.9; }
-    100% { mask-position:475px 475px;opacity:.35; }
+  @keyframes signal-expand {
+    0% { transform:scale(.78);opacity:0; }
+    20% { opacity:.55; }
+    70% { opacity:.4; }
+    100% { transform:scale(1.35);opacity:0; }
   }
-  @media(prefers-reduced-motion:reduce) { .grid-pattern-glow { opacity:.25; } }
+  @media(prefers-reduced-motion:reduce) { .signal-rings { opacity:.25; } }
+  @media(max-width:639px) { .signal-rings { width:640px;height:640px; }.signal-rings--blue { left:-420px;top:-180px; }.signal-rings--orange { right:-420px;bottom:-260px; } }
   .hero-inner { display:flex;justify-content:center; }
   .hero-copy { width:100%;max-width:1120px;text-align:center; }
   .hello { font-size:16px;color:var(--muted);margin:0 0 10px; }

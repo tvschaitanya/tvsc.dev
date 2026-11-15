@@ -1,4 +1,110 @@
 ---
 import WritingLayout from '../../layouts/WritingLayout.astro';
+import ChloeArchitecture from '../../components/ChloeArchitecture.astro';
+const steps = [
+  { title: 'Check the request', text: 'FastAPI validates the input and verifies a Cloudflare Turnstile token before making any model or search calls. A failed bot check stops the request.' },
+  { title: 'Understand the question', text: 'A pydantic-ai agent uses Claude Haiku 4.5 on Amazon Bedrock. It can respond to greetings, ask which school or program the visitor means, or decline questions outside CCI and FSU.' },
+  { title: 'Retrieve supporting information', text: 'For factual questions, the agent searches Weaviate using a combination of Titan v2 embeddings and keyword search. If the knowledge base cannot answer, it can search official FSU domains through Exa.' },
+  { title: 'Check the sources', text: 'The backend removes sources that were not returned by a real search. If no valid source remains, it replaces the answer with a message explaining that reliable information could not be found.' },
+  { title: 'Stream the response', text: 'The API sends answer text as NDJSON delta events, followed by a checked final event. The interface replaces the streamed draft with that final answer and its sources.' },
+];
+const stack = [
+  ['API', 'Python, FastAPI, uvicorn'],
+  ['Agent and language model', 'pydantic-ai · Claude Haiku 4.5 on Amazon Bedrock'],
+  ['Retrieval', 'Weaviate Cloud · Titan Text Embeddings v2 · BM25'],
+  ['Fallback search', 'Exa, restricted to FSU domains'],
+  ['Hosting', 'AWS Lambda arm64 · Lambda Web Adapter · streaming Function URL'],
+  ['Infrastructure and secrets', 'Terraform · S3 · AWS Systems Manager Parameter Store'],
+  ['Protection and tracing', 'Cloudflare Turnstile · Langfuse via OpenTelemetry'],
+];
 ---
-<WritingLayout title="How I built an AI RAG chatbot for CCI" />
+<WritingLayout title="Chloe: designing a grounded AI assistant for CCI, FSU">
+  <article>
+    <p class="project-kicker">Architecture case study</p>
+    <p class="lead">I built Chloe as a complete RAG system to help visitors find information about the College of Communication &amp; Information (CCI) at Florida State University (FSU). The pipeline spans content ingestion, knowledge-base retrieval, answer generation, and the chat interface. The architecture connects these stages with explicit boundaries around sources, model usage, and untrusted input.</p>
+    <div class="summary"><span>Knowledge-base first</span><span>Source-linked answers</span><span>Serverless streaming API</span></div>
+    <section class="prose" aria-labelledby="overview-title">
+      <h2 id="overview-title">The problem and design goals</h2>
+      <p>CCI spans three schools: Communication, Information, and Communication Science &amp; Disorders. A visitor asking about admissions or a deadline may need information specific to a school, program, or student level. The assistant needs enough context to find the right information and a way for the visitor to verify the answer.</p>
+      <p>I structured the system around four goals: use institutional content as the primary source, clarify ambiguous questions, constrain the cost of each request, and return a response the interface can display progressively.</p>
+      <p>The project spans three connected parts: an ingestion pipeline that prepares content for the knowledge base, <code>rag-query</code> for retrieval and answer generation, and <code>rag-chat-ui</code> for the visitor-facing experience. The query service consumes the populated Weaviate collection and streams responses back to the interface.</p>
+    </section>
+    <section class="prose" aria-labelledby="approach-title">
+      <h2 id="approach-title">The architecture approach</h2>
+      <p>I used retrieval-augmented generation (RAG) to connect the language model to CCI content at query time. The agent searches the knowledge base first, then uses domain-restricted web search only when that information is insufficient. This keeps the primary retrieval path focused while giving the system a limited fallback.</p>
+      <p>FastAPI runs on AWS Lambda behind a streaming Function URL. A pydantic-ai agent coordinates Claude Haiku 4.5 on Amazon Bedrock, Weaviate hybrid search, and Exa. The backend checks returned sources before sending the final response to the browser.</p>
+    </section>
+    <ChloeArchitecture />
+    <section class="prose" aria-labelledby="flow-heading">
+      <h2 id="flow-heading">How a question moves through the system</h2>
+      <ol class="steps">{steps.map(step => <li><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol>
+    </section>
+    <section class="decisions" aria-labelledby="decisions-title">
+      <h2 id="decisions-title">Key decisions and tradeoffs</h2>
+      <div class="decision-grid">
+      <div class="decision"><h3>Combine semantic retrieval with keyword matching</h3><p>Weaviate combines Titan Text Embeddings v2 with BM25 keyword search. Semantic retrieval supports questions phrased differently from the source text, while keyword matching helps preserve exact program names and institutional terminology. Retrieval still depends on the coverage and quality of the indexed content.</p></div>
+      <div class="decision"><h3>Keep web search behind the knowledge base</h3><p>Exa is restricted to FSU domains and is available only after a knowledge-base search. Each question permits up to two knowledge-base searches and one web search. This limits the fallback’s scope and usage, but official-domain results still need to be evaluated for relevance.</p></div>
+      <div class="decision"><h3>Use serverless hosting with a bounded execution window</h3><p>Lambda hosts the FastAPI application through the Lambda Web Adapter, avoiding a continuously running application server. The tradeoffs include startup overhead, a 60-second execution timeout, and dependence on downstream model and search services. No latency or load-test measurements are included in this case study.</p></div>
+      <div class="decision"><h3>Stream the draft, then reconcile with a checked answer</h3><p>NDJSON delta events let the interface display text while the model writes it. A final event carries the checked answer and sources and replaces that draft. This creates a clear response contract, although a visitor may briefly see text that changes after validation.</p></div>
+      </div>
+    </section>
+    <section class="prose" aria-labelledby="boundaries-title">
+      <h2 id="boundaries-title">Trust boundaries and cost controls</h2>
+      <p>The public API verifies Cloudflare Turnstile before invoking Bedrock or Exa. Failed verification rejects the request. Input validation limits the question length and accepted conversation history.</p>
+      <p>The last six turns of browser-supplied history are passed as quoted context. The agent is instructed to clarify missing school or program details and decline unrelated questions. These controls reduce exposure to untrusted input; they do not establish complete protection against prompt injection.</p>
+      <p>Agent execution is capped at five tool calls, eight model requests, and 800 output tokens per question. Together with search limits and the Lambda timeout, these bounds constrain individual requests. They do not replace traffic-level rate limiting or account-level spending controls.</p>
+      <p>Before finalizing a factual answer, the backend removes sources that were not returned by an actual search. If none remain, it returns a no-information response. This verifies source provenance, not whether each claim is supported by the cited page.</p>
+    </section>
+    <section aria-labelledby="stack-title">
+      <h2 id="stack-title">The stack</h2>
+      <dl class="stack">{stack.map(([label, value]) => <div><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+    </section>
+    <section class="prose" aria-labelledby="operations-title">
+      <h2 id="operations-title">Deployment and observability</h2>
+      <p>Terraform defines the Lambda, streaming Function URL, permissions, logs, and artifact storage. Secrets are loaded from encrypted SSM parameters at startup. CloudWatch captures application logs, while Langfuse records agent runs, model calls, tool calls, and token usage through OpenTelemetry.</p>
+      <p>Separating infrastructure configuration from encrypted secrets keeps credentials out of Terraform configuration. The deployment depends on Bedrock access, available SSM parameters, and a populated Weaviate collection. External retrieval services remain dependencies to monitor alongside the API.</p>
+    </section>
+    <section class="prose" aria-labelledby="outcome-title">
+      <h2 id="outcome-title">What the design delivers</h2>
+      <p>The system connects content ingestion with a visitor-facing chat experience through retrieval, source checking, and streamed responses. It also handles clarification, off-topic requests, and cases where reliable information cannot be found. Those behaviors make the assistant’s boundaries part of the API contract.</p>
+      <p>Answer quality, response time, cost per question, and user adoption have not been quantified in the material presented here. The next validation step would be a representative evaluation set across the three schools, covering retrieval relevance, citation support, ambiguous questions, and no-information cases, followed by latency and concurrency testing.</p>
+      <h3>The architectural takeaway</h3>
+      <p>The model is one part of the system. Retrieval quality, trust boundaries, response validation, and operating limits determine how useful the assistant can be. Those concerns span the pipeline, from the content entering the knowledge base to the answer and sources shown in the interface.</p>
+    </section>
+    <a class="closing-link" href="/#projects">← Explore the other projects</a>
+  </article>
+</WritingLayout>
+<style>
+  article { margin-top:24px; }
+  .project-kicker { display:inline-flex;align-items:center;gap:10px;font:12px/1.6 var(--font-mono);color:var(--ink); }
+  .project-kicker::before { content:'';width:8px;height:8px;background:var(--orange);border-radius:2px; }
+  .lead { max-width:70ch;font-size:clamp(18px,2vw,22px);line-height:1.7;color:var(--muted);margin:24px 0; }
+  .summary { display:flex;flex-wrap:wrap;gap:10px;margin-bottom:56px; }
+  .summary span { padding:10px 14px;border:1px solid color-mix(in srgb,var(--orange) 35%,var(--line));border-radius:4px;font-size:13px;background:color-mix(in srgb,var(--orange) 10%,var(--bg)); }
+  section { margin-block:56px; }
+  h2 { font-size:clamp(28px,4vw,40px);line-height:1.15;letter-spacing:-.035em;margin-bottom:24px; }
+  h3 { font-size:21px;line-height:1.35;letter-spacing:-.02em;margin:28px 0 10px; }
+  .prose { max-width:76ch; }
+  .prose p { font-size:16px;line-height:1.8;color:var(--muted); }
+  code { font:14px var(--font-mono);color:var(--ink); }
+  .steps { padding-left:24px; } .steps li { padding-left:12px;margin-bottom:24px; } .steps li::marker { color:var(--orange);font-family:var(--font-mono); } .steps h3 { margin-top:0; }
+  .stack { margin:0;border-top:1px solid var(--line); }
+  .stack div { display:grid;grid-template-columns:220px 1fr;gap:24px;padding:18px 0;border-bottom:1px solid var(--line);font-size:15px;line-height:1.6; }
+  dt { font-weight:500; } dd { margin:0;color:var(--muted); }
+  section > h2::before { content:'';display:block;width:40px;height:3px;background:var(--orange);margin-bottom:18px; }
+  section[aria-labelledby="approach-title"] { max-width:none;border-left:3px solid var(--orange);padding:28px 32px;background:color-mix(in srgb,var(--orange) 7%,var(--bg));border-radius:0 8px 8px 0; }
+  section[aria-labelledby="approach-title"] p { max-width:72ch; }
+  .decision-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px; }
+  .decision { padding:24px;border:1px solid var(--line);border-top:3px solid var(--orange);border-radius:8px;background:var(--surface); }
+  .decision h3 { margin-top:0;font-size:22px; }
+  .decision p { color:var(--muted);font-size:15px;line-height:1.75;margin-bottom:0; }
+  .steps { list-style:none;padding-left:0;counter-reset:query-step; }
+  .steps li { position:relative;counter-increment:query-step;padding:0 0 24px 58px;border-bottom:1px solid var(--line); }
+  .steps li::before { content:counter(query-step,decimal-leading-zero);position:absolute;left:0;top:0;display:grid;place-items:center;width:38px;height:38px;background:var(--orange);color:var(--paper);border-radius:6px;font:13px var(--font-mono); }
+  .stack dt { border-left:3px solid var(--orange);padding-left:14px; }
+  section[aria-labelledby="outcome-title"] { max-width:none;padding:32px;border:1px solid color-mix(in srgb,var(--orange) 40%,var(--line));border-radius:8px;background:color-mix(in srgb,var(--orange) 6%,var(--bg)); }
+  section[aria-labelledby="outcome-title"] p { max-width:72ch; }
+  @media(max-width:639px) { .decision-grid { grid-template-columns:1fr; }.decision { padding:20px; }section[aria-labelledby="approach-title"],section[aria-labelledby="outcome-title"] { padding:24px 20px; }.steps li { padding-left:50px; } }
+  .closing-link { display:inline-flex;align-items:center;min-height:44px;color:var(--muted);border-bottom:1px solid var(--line); }
+  @media(max-width:639px) { .stack div { grid-template-columns:1fr;gap:6px; }section { margin-block:40px; }.summary { margin-bottom:40px; } }
+</style>

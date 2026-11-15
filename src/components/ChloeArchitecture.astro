@@ -1,0 +1,184 @@
+<section class="architecture" aria-labelledby="architecture-title">
+  <div class="diagram-heading"><div><p class="eyebrow">Architecture · Query path</p><h2 id="architecture-title">From question to answer</h2></div><button id="flow-pause" type="button">Pause</button></div>
+  <p class="diagram-intro">The knowledge base comes first. Exa searches official FSU domains only when the retrieved information cannot answer the question. The dashed Exa branch is a fallback; the animation follows the knowledge-base path.</p>
+  <div class="diagram-scroll" tabindex="0" role="region" aria-label="Chloe architecture diagram, scroll horizontally to explore"><svg id="flow" viewBox="0 0 1330 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="flow-title flow-desc" class="flow-diagram" font-family="ui-sans-serif, system-ui, sans-serif">
+          <title id="flow-title">Chloe question to answer loop</title>
+          <desc id="flow-desc">A visitor's question goes through the chat UI to a streaming FastAPI Lambda, which checks Turnstile and runs an agent. The agent embeds the query with Titan, searches Weaviate, Exa only as a fallback when the knowledge base has no info, and Bedrock, then the answer streams back to the chat UI and the visitor.</desc>
+          <defs>
+            <marker id="ah-main" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon class="m-main" points="0 0, 9 3.5, 0 7"/></marker>
+            <marker id="ah-plain" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon class="m-plain" points="0 0, 9 3.5, 0 7"/></marker>
+            <marker id="ah-sec" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon class="m-sec" points="0 0, 9 3.5, 0 7"/></marker>
+            <marker id="ah-dash" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon class="m-dash" points="0 0, 9 3.5, 0 7"/></marker>
+          </defs>
+          <rect class="frame" x="510" y="208" width="510" height="112" rx="14"/>
+          <text class="frame-label" x="526" y="226" font-size="9" letter-spacing="1.4" font-weight="600">AWS LAMBDA</text>
+          <path class="edge e-main" data-edge="user-ui" data-from="user" data-to="ui" d="M 170 279.1 L 270 279.1" fill="none" marker-end="url(#ah-main)"/>
+          <path class="edge e-main" data-edge="ui-api" data-from="ui" data-to="api" d="M 400 279.1 L 540 279.1" fill="none" marker-end="url(#ah-main)"/>
+          <path class="edge e-sec" data-edge="api-turnstile" data-from="api" data-to="turnstile" d="M 598 240 L 598 100" fill="none" marker-end="url(#ah-sec)"/>
+          <path class="edge e-sec" data-edge="turnstile-api" data-from="turnstile" data-to="api" d="M 612 100 L 612 240" fill="none" marker-end="url(#ah-sec)"/>
+          <path class="edge e-plain" data-edge="api-agent" data-from="api" data-to="agent" d="M 670 278.05 L 860 278.05" fill="none" marker-end="url(#ah-plain)"/>
+          <path class="edge e-plain" data-edge="agent-bedrock" data-from="agent" data-to="bedrock" d="M 990 263 L 1150 263" fill="none" marker-end="url(#ah-plain)"/>
+          <path class="edge e-plain" data-edge="bedrock-agent" data-from="bedrock" data-to="agent" d="M 1150 277 L 990 277" fill="none" marker-end="url(#ah-plain)"/>
+          <path class="edge e-plain" data-edge="agent-titan" data-from="agent" data-to="titan" d="M 918 300 L 918 440" fill="none" marker-end="url(#ah-plain)"/>
+          <path class="edge e-plain" data-edge="titan-agent" data-from="titan" data-to="agent" d="M 932 440 L 932 300" fill="none" marker-end="url(#ah-plain)"/>
+          <path class="edge e-plain" data-edge="agent-weaviate" data-from="agent" data-to="weaviate" d="M 982 300 L 982 368 L 1190 368 L 1190 440" fill="none" marker-end="url(#ah-plain)"/>
+          <path class="edge e-plain" data-edge="weaviate-agent" data-from="weaviate" data-to="agent" d="M 1215 440 L 1215 346 L 998 346 L 998 300" fill="none" marker-end="url(#ah-plain)"/>
+          <path class="edge e-dash" data-edge="agent-exa" data-from="agent" data-to="exa" d="M 918 240 L 918 100" fill="none" marker-end="url(#ah-dash)"/>
+          <path class="edge e-dash" data-edge="exa-agent" data-from="exa" data-to="agent" d="M 932 100 L 932 240" fill="none" marker-end="url(#ah-dash)"/>
+          <path class="edge e-main" data-edge="agent-api" data-from="agent" data-to="api" d="M 860 263 L 670 263" fill="none" marker-end="url(#ah-main)"/>
+          <path class="edge e-main" data-edge="api-ui" data-from="api" data-to="ui" d="M 590 300 L 590 326 Q 590 334 582 334 L 359 334 Q 351 334 351 326 L 351 300" fill="none" marker-end="url(#ah-main)"/>
+          <path class="edge e-main" data-edge="ui-user" data-from="ui" data-to="user" d="M 335 300 L 335 326 Q 335 334 327 334 L 108 334 Q 100 334 100 326 L 100 300" fill="none" marker-end="url(#ah-main)"/>
+          <path class="edge e-dash" data-edge="api-langfuse" data-from="api" data-to="langfuse" d="M 605 300 L 605 440" fill="none" marker-end="url(#ah-dash)"/>
+          <g class="node t-ext" data-node="user"><rect x="40" y="240" width="130" height="60" rx="12"/><text class="nl" x="105.0" y="267" text-anchor="middle" font-size="12" font-weight="700">Visitor</text><text class="ns" x="105.0" y="284" text-anchor="middle" font-size="9.5">CCI, FSU site</text></g>
+          <g class="node t-fe" data-node="ui"><rect x="270" y="240" width="130" height="60" rx="12"/><text class="nl" x="335.0" y="267" text-anchor="middle" font-size="12" font-weight="700">Chat UI</text><text class="ns" x="335.0" y="284" text-anchor="middle" font-size="9.5">Astro ChatWidget</text></g>
+          <g class="node t-be" data-node="api"><rect x="540" y="240" width="130" height="60" rx="12"/><text class="nl" x="605.0" y="267" text-anchor="middle" font-size="12" font-weight="700">FastAPI /chat</text><text class="ns" x="605.0" y="284" text-anchor="middle" font-size="9.5">Function URL, stream</text></g>
+          <g class="node t-be" data-node="agent"><rect x="860" y="240" width="130" height="60" rx="12"/><text class="nl" x="925.0" y="267" text-anchor="middle" font-size="12" font-weight="700">Agent</text><text class="ns" x="925.0" y="284" text-anchor="middle" font-size="9.5">pydantic-ai + check</text></g>
+          <g class="node t-cloud" data-node="bedrock"><rect x="1150" y="240" width="130" height="60" rx="12"/><text class="nl" x="1215.0" y="267" text-anchor="middle" font-size="12" font-weight="700">Claude Haiku 4.5</text><text class="ns" x="1215.0" y="284" text-anchor="middle" font-size="9.5">via AWS Bedrock</text></g>
+          <g class="node t-sec" data-node="turnstile"><rect x="540" y="40" width="130" height="60" rx="12"/><text class="nl" x="605.0" y="67" text-anchor="middle" font-size="12" font-weight="700">Cloudflare Turnstile</text><text class="ns" x="605.0" y="84" text-anchor="middle" font-size="9.5">bot check</text></g>
+          <g class="node t-ext" data-node="exa"><rect x="860" y="40" width="130" height="60" rx="12"/><text class="nl" x="925.0" y="67" text-anchor="middle" font-size="12" font-weight="700">Exa</text><text class="ns" x="925.0" y="84" text-anchor="middle" font-size="9.5">FSU domains only</text></g>
+          <g class="node t-cloud" data-node="titan"><rect x="860" y="440" width="130" height="60" rx="12"/><text class="nl" x="925.0" y="467" text-anchor="middle" font-size="12" font-weight="700">Titan Embeddings</text><text class="ns" x="925.0" y="484" text-anchor="middle" font-size="9.5">via AWS Bedrock</text></g>
+          <g class="node t-db" data-node="weaviate"><rect x="1150" y="440" width="130" height="60" rx="12"/><text class="nl" x="1215.0" y="467" text-anchor="middle" font-size="12" font-weight="700">Weaviate</text><text class="ns" x="1215.0" y="484" text-anchor="middle" font-size="9.5">collection CCIPages</text></g>
+          <g class="node t-ext" data-node="langfuse"><rect x="540" y="440" width="130" height="60" rx="12"/><text class="nl" x="605.0" y="467" text-anchor="middle" font-size="12" font-weight="700">Langfuse</text><text class="ns" x="605.0" y="484" text-anchor="middle" font-size="9.5">agent traces</text></g>
+          <g class="pill e-main"><rect x="192.4" y="255" width="55.2" height="16" rx="8"/><text x="220.0" y="266" text-anchor="middle" font-size="9.5" font-weight="600">question</text></g>
+          <g class="pill e-main"><rect x="437.0" y="255" width="66.0" height="16" rx="8"/><text x="470.0" y="266" text-anchor="middle" font-size="9.5" font-weight="600">POST /chat</text></g>
+          <g class="pill e-sec"><rect x="549.6" y="163" width="44.4" height="16" rx="8"/><text x="571.8" y="174" text-anchor="middle" font-size="9.5" font-weight="600">verify</text></g>
+          <g class="pill e-sec"><rect x="616.0" y="163" width="66.0" height="16" rx="8"/><text x="649.0" y="174" text-anchor="middle" font-size="9.5" font-weight="600">pass / 403</text></g>
+          <g class="pill e-plain"><rect x="750.9" y="286" width="28.2" height="16" rx="8"/><text x="765.0" y="297" text-anchor="middle" font-size="9.5" font-weight="600">run</text></g>
+          <g class="pill e-plain"><rect x="1047.8" y="244" width="44.4" height="16" rx="8"/><text x="1070.0" y="255" text-anchor="middle" font-size="9.5" font-weight="600">prompt</text></g>
+          <g class="pill e-plain"><rect x="1037.0" y="284" width="66.0" height="16" rx="8"/><text x="1070.0" y="295" text-anchor="middle" font-size="9.5" font-weight="600">completion</text></g>
+          <g class="pill e-plain"><rect x="842.6" y="363" width="71.4" height="16" rx="8"/><text x="878.3" y="374" text-anchor="middle" font-size="9.5" font-weight="600">embed query</text></g>
+          <g class="pill e-plain"><rect x="936.0" y="363" width="44.4" height="16" rx="8"/><text x="958.2" y="374" text-anchor="middle" font-size="9.5" font-weight="600">vector</text></g>
+          <g class="pill e-plain"><rect x="1044.9" y="375" width="82.2" height="16" rx="8"/><text x="1086.0" y="386" text-anchor="middle" font-size="9.5" font-weight="600">hybrid search</text></g>
+          <g class="pill e-plain"><rect x="1083.8" y="327" width="44.4" height="16" rx="8"/><text x="1106.0" y="338" text-anchor="middle" font-size="9.5" font-weight="600">chunks</text></g>
+          <g class="pill e-dash"><rect x="777.8" y="163" width="136.2" height="16" rx="8"/><text x="845.9" y="174" text-anchor="middle" font-size="9.5" font-weight="600">only if KB has no match</text></g>
+          <g class="pill e-dash"><rect x="936.0" y="163" width="39.0" height="16" rx="8"/><text x="955.5" y="174" text-anchor="middle" font-size="9.5" font-weight="600">pages</text></g>
+          <g class="pill e-main"><rect x="726.6" y="244" width="76.8" height="16" rx="8"/><text x="765.0" y="255" text-anchor="middle" font-size="9.5" font-weight="600">final answer</text></g>
+          <g class="pill e-main"><rect x="428.9" y="341" width="82.2" height="16" rx="8"/><text x="470.0" y="352" text-anchor="middle" font-size="9.5" font-weight="600">NDJSON stream</text></g>
+          <g class="pill e-main"><rect x="195.8" y="341" width="44.4" height="16" rx="8"/><text x="218.0" y="352" text-anchor="middle" font-size="9.5" font-weight="600">answer</text></g>
+          <g class="pill e-dash"><rect x="611.0" y="365" width="71.4" height="16" rx="8"/><text x="646.7" y="376" text-anchor="middle" font-size="9.5" font-weight="600">OTel traces</text></g>
+          <g id="comets"></g>
+        </svg></div>
+  <p class="diagram-note">On smaller screens, scroll sideways to explore the diagram.</p>
+</section>
+<style>
+  .architecture { margin-block:64px; }
+  .diagram-heading { display:flex;align-items:center;justify-content:space-between;gap:20px; }
+  .eyebrow { color:var(--muted);font:12px var(--font-mono);margin-bottom:12px; }
+  h2 { font-size:clamp(28px,4vw,40px);line-height:1.15;margin-bottom:16px;letter-spacing:-.035em; }
+  button { flex-shrink:0;min-height:44px;padding:8px 18px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;cursor:pointer; }
+  button:disabled { opacity:.65;cursor:default; }
+  .diagram-intro { max-width:76ch;color:var(--muted);line-height:1.75; }
+  .diagram-scroll { overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:16px; }
+  .flow-diagram { display:block;width:100%;min-width:1050px; }
+  .diagram-note { color:var(--muted);font-size:12px;margin:12px 0 0; }
+  #flow { --card:var(--surface);--flow-accent:#4f46e5;--fe:#0284c7;--be:#4f46e5;--cloud:#d97706;--sec:#e11d48;--ext:#64748b;--db:#059669; }
+  :global(html[data-theme="dark"]) #flow { --flow-accent:#818cf8;--fe:#38bdf8;--be:#818cf8;--cloud:#fbbf24;--sec:#fb7185;--ext:#94a3b8;--db:#34d399; }
+  #flow .e-main { --c:var(--flow-accent); } #flow .e-plain { --c:var(--muted); } #flow .e-sec { --c:var(--sec); } #flow .e-dash { --c:var(--cloud); }
+  #flow .edge { stroke:var(--c);stroke-width:1.8;stroke-opacity:.6; } #flow .edge.e-dash { stroke-dasharray:5 4; }
+  #flow .m-main { fill:var(--flow-accent); } #flow .m-plain { fill:var(--muted); } #flow .m-sec { fill:var(--sec); } #flow .m-dash { fill:var(--cloud); }
+  #flow .pill rect { fill:var(--card);stroke:var(--c);stroke-opacity:.4; } #flow .pill text { fill:var(--c); }
+  #flow .frame { fill:color-mix(in srgb,var(--cloud) 6%,transparent);stroke:var(--cloud);stroke-dasharray:4 4; } #flow .frame-label { fill:var(--cloud); }
+  #flow .t-fe { --c:var(--fe); } #flow .t-be { --c:var(--be); } #flow .t-db { --c:var(--db); } #flow .t-cloud { --c:var(--cloud); } #flow .t-sec { --c:var(--sec); } #flow .t-ext { --c:var(--ext); }
+  #flow .node rect { fill:color-mix(in srgb,var(--c) 9%,var(--card));stroke:var(--c);stroke-width:1.5; }
+  #flow .node .nl { fill:var(--ink); } #flow .node .ns { fill:var(--muted); }
+  #flow :global(.node.lit rect) { stroke-width:2.6; }
+</style>
+<script>
+      const STEP_IDS = ["user-ui","ui-api","api-turnstile","turnstile-api","api-agent","agent-bedrock","bedrock-agent","agent-titan","titan-agent","agent-weaviate","weaviate-agent","agent-bedrock","bedrock-agent","agent-api","api-ui","ui-user","api-langfuse"];
+      const SPEED = 120;      // px per second
+      const MIN_TRAVEL = 900; // ms
+      const HANDOFF = 350;    // ms between steps
+      const REST = 1600;      // ms before the loop restarts
+
+      const svg = document.getElementById("flow") as unknown as SVGSVGElement;
+      const layer = document.getElementById("comets") as unknown as SVGGElement;
+      const pauseBtn = document.getElementById("flow-pause") as HTMLButtonElement;
+
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const edge = (id: string) => svg.querySelector<SVGPathElement>(`[data-edge="${id}"]`)!;
+      const node = (id: string) => svg.querySelector<SVGGElement>(`[data-node="${id}"]`)!;
+      const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+      // ---- animation: loops continuously; the visitor can pause and resume ----
+      let token = 0;          // bumped by Replay to cancel the pass in progress
+      let paused = false;
+
+      let currentAnim: Animation | null = null;
+
+      function setUi() {
+        pauseBtn.textContent = paused ? "Resume" : "Pause";
+      }
+
+      async function step(id: string, my: number) {
+        const base = edge(id);
+        const len = base.getTotalLength();
+        const travel = Math.max(MIN_TRAVEL, (len / SPEED) * 1000);
+        const from = node(base.dataset.from!);
+        const to = node(base.dataset.to!);
+        from.classList.add("lit");
+
+        const comet = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        comet.setAttribute("d", base.getAttribute("d")!);
+        comet.setAttribute("fill", "none");
+        comet.setAttribute("stroke-width", "4");
+        comet.setAttribute("stroke-linecap", "round");
+        comet.style.stroke = getComputedStyle(base).stroke;
+        const head = Math.min(26, len * 0.5);
+        comet.setAttribute("stroke-dasharray", `${head} ${len + head}`);
+        comet.style.filter = `drop-shadow(0 0 4px ${comet.style.stroke})`;
+        layer.appendChild(comet);
+
+        const glow = base.animate([{ strokeOpacity: 0.6 }, { strokeOpacity: 1 }, { strokeOpacity: 0.6 }], { duration: travel + 600 });
+        const run = comet.animate(
+          [{ strokeDashoffset: head }, { strokeDashoffset: -len }],
+          { duration: travel, easing: "ease-in-out", fill: "forwards" }
+        );
+        currentAnim = run;
+        if (paused) { run.pause(); glow.pause(); }
+        pausables = [run, glow];
+        await run.finished.catch(() => {});
+        comet.remove();
+        from.classList.remove("lit");
+        if (my === token) {
+          to.classList.add("lit");
+          setTimeout(() => to.classList.remove("lit"), 700);
+        }
+      }
+      let pausables: Animation[] = [];
+
+      async function pause(ms: number, my: number) {
+        const end = Date.now() + ms;
+        while (my === token && (Date.now() < end || paused)) await wait(60);
+      }
+
+      async function play() {
+        const my = ++token;
+        currentAnim?.cancel();
+        layer.innerHTML = "";
+        svg.querySelectorAll(".lit").forEach((n) => n.classList.remove("lit"));
+        paused = false;
+
+        setUi();
+        while (my === token) {
+          for (const id of STEP_IDS) {
+            if (my !== token) return;
+            await step(id, my);
+            await pause(HANDOFF, my);
+          }
+          await pause(REST, my);
+        }
+      }
+
+      pauseBtn.addEventListener("click", () => {
+        paused = !paused;
+        pausables.forEach((a) => (paused ? a.pause() : a.play()));
+        setUi();
+      });
+
+      setUi();
+      if (!reduce) play();
+      else { pauseBtn.disabled = true; pauseBtn.textContent = "Motion reduced"; }
+      window.addEventListener('pagehide', () => { token++; pausables.forEach(animation => animation.cancel()); }, { once: true });
+
+</script>
