@@ -1,47 +1,144 @@
 ---
 const biography = [
-    'I’m Chaitanya Tatikonda, a software engineer with a master’s in Information Technology from Florida State University. I’ve always been driven by a simple question: how does this actually work under the hood?',
-    'That curiosity has taken me from application development to production operations, infrastructure, and automation. I especially enjoy system design: connecting the pieces, exploring tradeoffs, and figuring out how applications and infrastructure can work together to meet real needs.',
-    'Today, I’m focused on cloud and AI. I bring technical and non-technical perspectives together to turn ideas into practical systems, balancing cost, reliability, and complexity so teams can build on a foundation they trust.',
-  ];
-import SectionLabel from '../ui/SectionLabel.astro';
-import Portrait from '../Portrait.astro';
+    "I’m Chaitanya Tatikonda, a software engineer with a master’s in Information Technology from Florida State University. I’ve always been driven by a simple question: how does this actually work under the hood?",
+    "That curiosity has taken me from application development to production operations, infrastructure, and automation. I especially enjoy system design: connecting the pieces, exploring tradeoffs, and figuring out how applications and infrastructure can work together to meet real needs.",
+    "Today, I’m focused on cloud and AI. I bring technical and non-technical perspectives together to turn ideas into practical systems, balancing cost, reliability, and complexity so teams can build on a foundation they trust.",
+];
+import SectionLabel from "../ui/SectionLabel.astro";
+import Portrait from "../Portrait.astro";
 
-const portraitSrc = '/images/tvsc.jpeg';
+const portraitSrc = "/images/tvsc.jpeg";
 ---
+
 <section id="about" class="section about" aria-labelledby="about-title">
-  <div class="wrap">
-    <SectionLabel number="01" label="About" note="The person behind the systems" />
-    <div class="about-grid">
-      <div class="about-story">
-        <h2 id="about-title">A bit about <br />me<span class="orange">.</span></h2>
-        {biography.map(paragraph => <p>{paragraph}</p>)}
-        <div class="about-credentials">
-          <h3>Certifications</h3>
-          <ul>
-            <li>AWS Certified Solutions Architect – Associate</li>
-            <li>AWS Certified AI Practitioner</li>
-          </ul>
+    <div class="wrap">
+        <SectionLabel number="01" label="About" />
+        <div class="about-grid">
+            <div class="about-story">
+                <h2 id="about-title">
+                    A bit about <br />
+                    me<span class="orange">.</span>
+                </h2>
+                {biography.map((paragraph) => (
+                    <p>{paragraph}</p>
+                ))}
+                <div class="about-credentials">
+                    <h3>Certifications</h3>
+                    <ul>
+                        <li>AWS Certified Solutions Architect – Associate</li>
+                        <li>AWS Certified AI Practitioner</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="about-portrait">
+                <Portrait src={portraitSrc} />
+                <p class="portrait-note">
+                    <svg
+                        data-about-note-arrow
+                        aria-hidden="true"
+                        width="20"
+                        height="28"
+                        viewBox="0 0 20 28"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M4 26C4 17 10 17 10 8V3m-5 5 5-5 5 5" />
+                    </svg>
+                    The person behind the systems
+                </p>
+            </div>
         </div>
-      </div>
-      <div class="about-portrait">
-        <Portrait src={portraitSrc} />
-      </div>
     </div>
-  </div>
 </section>
 <style>
-  .about { background:color-mix(in srgb,var(--blue) 9%,var(--bg));--surface:color-mix(in srgb,var(--blue) 14%,var(--bg)); }
-  .about-grid { display:grid;grid-template-columns:1.1fr 1fr;gap:12%;align-items:start; }
-  .about-story h2 { margin-bottom:32px; }
-  .about-story p { color:var(--muted);font-size:16px;line-height:1.75;margin-bottom:20px;max-width:560px; }
-  .about-story p:last-child { margin-bottom:0; }
-  .about-credentials { margin-top:28px;padding-top:24px;border-top:1px solid var(--line); }
-  .about-credentials h3 { font-size:14px;font-weight:500;line-height:1.4;margin:0 0 12px;color:var(--ink); }
-  .about-credentials ul { list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px; }
-  .about-credentials li { display:flex;align-items:baseline;gap:10px;font-size:14px;line-height:1.6;color:var(--ink); }
-  .about-credentials li::before { content:'';width:6px;height:6px;flex-shrink:0;border-radius:50%;background:var(--blue);align-self:flex-start;margin-top:8px; }
-  .about-portrait { min-width:0; }
-  @media(max-width:1023px) { .about-grid { gap:48px; } }
-  @media(max-width:639px) { .about-grid { grid-template-columns:1fr;gap:40px; }.about-story h2 br { display:none; } }
+    .about {
+        background: color-mix(in srgb, var(--blue) 9%, var(--bg));
+        --surface: color-mix(in srgb, var(--blue) 14%, var(--bg));
+    }
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: 12%;
+        align-items: start;
+    }
+    .about-story h2 {
+        margin-bottom: 32px;
+    }
+    .about-story p {
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.75;
+        margin-bottom: 20px;
+        max-width: 560px;
+    }
+    .about-story p:last-child {
+        margin-bottom: 0;
+    }
+    .about-credentials {
+        margin-top: 28px;
+        padding-top: 24px;
+        border-top: 1px solid var(--line);
+    }
+    .about-credentials h3 {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.4;
+        margin: 0 0 12px;
+        color: var(--ink);
+    }
+    .about-credentials ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .about-credentials li {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--ink);
+    }
+    .about-credentials li::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background: var(--blue);
+        align-self: flex-start;
+        margin-top: 8px;
+    }
+    .about-portrait {
+        min-width: 0;
+    }
+    .portrait-note {
+        display: grid;
+        justify-items: center;
+        gap: 4px;
+        margin: 16px 0 0;
+        color: var(--muted);
+        font: 400 13px/1.5 var(--font-mono);
+        text-align: center;
+    }
+    @media (max-width: 1023px) {
+        .about-grid {
+            gap: 48px;
+        }
+    }
+    @media (max-width: 639px) {
+        .about-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+        .about-story h2 br {
+            display: none;
+        }
+    }
 </style>
