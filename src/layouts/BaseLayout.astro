@@ -1,72 +1,108 @@
 ---
-import '../styles/global.css';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 // Page metadata belongs to the shared document layout.
 const metadata = {
-  name: 'Chaitanya Tatikonda',
-  siteName: "Chaitanya's Portfolio",
-  role: 'Cloud & AI Engineer',
-  introduction: 'I connect business needs with practical cloud and AI solutions.',
+    siteName: "Chaitanya's Portfolio",
 };
 ---
+
 <!doctype html>
-<html lang="en" data-theme="dark" data-type="software" data-radius="sharp" data-buttons="solid">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="generator" content={Astro.generator} />
-    <meta name="page-type" content="software" />
-    <meta name="site-kind" content="software" />
-    <title>{metadata.siteName} — {metadata.role}</title>
-    <meta name="description" content="Chaitanya Tatikonda — Cloud & AI Engineer with experience in development, production operations, infrastructure, and automation." />
-    <meta property="og:title" content={`${metadata.name} — ${metadata.role}`} />
-    <meta property="og:description" content={metadata.introduction} />
-    <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#141820" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400..700&family=Funnel+Sans:wght@400..600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <script is:inline>
-      // Refresh follows the URL anchor, never the browser's previous scroll offset.
-      // Ordinary navigation and back/forward restoration keep their native behavior.
-      const navigationEntry = performance.getEntriesByType('navigation')[0];
-      if (navigationEntry?.type === 'reload') {
-        const previousRestoration = history.scrollRestoration;
-        history.scrollRestoration = 'manual';
-        window.addEventListener('pageshow', async (event) => {
-          if (event.persisted) return;
-          await document.fonts.ready;
-          requestAnimationFrame(() => {
-            let target = null;
+<html
+    lang="en"
+    data-theme="dark"
+    data-type="software"
+    data-radius="sharp"
+    data-buttons="solid"
+>
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
+        <meta name="generator" content={Astro.generator} />
+        <meta name="page-type" content="software" />
+        <meta name="site-kind" content="software" />
+        <title>{metadata.siteName}</title>
+
+        <meta property="og:type" content="website" />
+        <meta name="theme-color" content="#141820" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400..700&family=Funnel+Sans:wght@400..600&family=DM+Mono:wght@400;500&display=swap"
+            rel="stylesheet"
+        />
+        <script is:inline>
+            // Refresh follows the URL anchor, never the browser's previous scroll offset.
+            // Ordinary navigation and back/forward restoration keep their native behavior.
+            const navigationEntry =
+                performance.getEntriesByType("navigation")[0];
+            if (navigationEntry?.type === "reload") {
+                const previousRestoration = history.scrollRestoration;
+                history.scrollRestoration = "manual";
+                window.addEventListener(
+                    "pageshow",
+                    async (event) => {
+                        if (event.persisted) return;
+                        await document.fonts.ready;
+                        requestAnimationFrame(() => {
+                            let target = null;
+                            try {
+                                const id = decodeURIComponent(
+                                    location.hash.slice(1),
+                                );
+                                if (id) target = document.getElementById(id);
+                            } catch {}
+                            if (target)
+                                target.scrollIntoView({
+                                    block: "start",
+                                    behavior: "instant",
+                                });
+                            else
+                                window.scrollTo({
+                                    top: 0,
+                                    left: 0,
+                                    behavior: "instant",
+                                });
+                            requestAnimationFrame(() => {
+                                history.scrollRestoration = previousRestoration;
+                            });
+                        });
+                    },
+                    { once: true },
+                );
+            }
+        </script>
+        <script is:inline>
             try {
-              const id = decodeURIComponent(location.hash.slice(1));
-              if (id) target = document.getElementById(id);
+                const saved = localStorage.getItem("theme");
+                document.documentElement.dataset.theme =
+                    saved === "light" || saved === "dark" ? saved : "dark";
             } catch {}
-            if (target) target.scrollIntoView({ block: 'start', behavior: 'instant' });
-            else window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-            requestAnimationFrame(() => { history.scrollRestoration = previousRestoration; });
-          });
-        }, { once: true });
-      }
-    </script>
-    <script is:inline>
-      try {
-        const saved = localStorage.getItem('theme');
-        document.documentElement.dataset.theme = saved === 'light' || saved === 'dark' ? saved : 'dark';
-      } catch {}
-      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', document.documentElement.dataset.theme === 'light' ? '#f5f4f0' : '#141820');
-    </script>
-  </head>
-  <body>
-    <!-- One complementary blue/orange palette across both themes. -->
-    <Header />
-    <main id="main" tabindex="-1"><slot /></main>
-    <Footer />
-    <script>
-      import { initMotion } from '../scripts/motion';
-      initMotion();
-    </script>
-  </body>
+            document
+                .querySelector('meta[name="theme-color"]')
+                ?.setAttribute(
+                    "content",
+                    document.documentElement.dataset.theme === "light"
+                        ? "#f5f4f0"
+                        : "#141820",
+                );
+        </script>
+    </head>
+    <body>
+        <!-- One complementary blue/orange palette across both themes. -->
+        <Header />
+        <main id="main" tabindex="-1">
+            <slot />
+        </main>
+        <Footer />
+        <script>
+            import { initMotion } from "../scripts/motion";
+            initMotion();
+        </script>
+    </body>
 </html>
