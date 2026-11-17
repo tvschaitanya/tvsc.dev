@@ -33,25 +33,7 @@ export function initMotion() {
       },
     });
   });
-  let noteDismissed = false;
-  media.add({ normal: '(prefers-reduced-motion: no-preference)', reduced: '(prefers-reduced-motion: reduce)' }, ({ conditions }) => {
-    const note = document.querySelector('#about .portrait-note');
-    if (!note) return;
-    if (noteDismissed) {
-      gsap.set(note, { autoAlpha: 0 });
-      return;
-    }
-    gsap.to(note, {
-      autoAlpha: 0,
-      duration: conditions?.reduced ? 0 : .3,
-      scrollTrigger: {
-        trigger: note,
-        start: 'top 45%',
-        once: true,
-        onEnter: () => { noteDismissed = true; },
-      },
-    });
-  });
+
   const cleanup = () => media.revert();
   window.addEventListener('pagehide',cleanup,{once:true});
   if (import.meta.hot) import.meta.hot.dispose(cleanup);
