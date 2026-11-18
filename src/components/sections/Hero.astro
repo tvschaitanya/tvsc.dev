@@ -256,22 +256,37 @@ const introduction = {
         .hero {
             padding: calc(var(--nav-height) + 80px) 0 96px;
         }
+        .hello {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
         h1 {
-            font-size: 48px;
+            font-size: clamp(30px, 8vw, 36px);
+            margin-bottom: 10px;
         }
         .role {
-            font-size: 23px;
+            font-size: 18px;
+            margin-bottom: 18px;
+        }
+        .hero-description {
             margin-bottom: 24px;
         }
         .hero-description p {
-            font-size: 17px;
-            line-height: 1.7;
+            font-size: 16px;
+            line-height: 1.6;
         }
         .hero-actions {
             flex-direction: column;
             gap: 12px;
             width: min(100%, 300px);
             margin-inline: auto;
+        }
+        .hero-actions > :global(.button) {
+            width: auto;
+            min-height: 44px;
+            padding: 8px 16px;
+            gap: 16px;
+            font-size: 14px;
         }
         .about-link {
             width: 100%;
