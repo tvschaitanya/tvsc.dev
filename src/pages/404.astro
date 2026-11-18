@@ -1,0 +1,82 @@
+---
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="robots" content="noindex" />
+        <title>Page not found — Chaitanya’s Portfolio</title>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    </head>
+    <body>
+        <main class="wrap">
+            <div class="error-page">
+                <p class="status" aria-hidden="true">404<span>.</span></p>
+                <h1>Page not found</h1>
+                <p class="description">The page you’re looking for may have moved or been removed.</p>
+                <a class="home-link" href="/">
+                    <span aria-hidden="true">←</span> Back to homepage
+                </a>
+            </div>
+        </main>
+    </body>
+</html>
+
+<style>
+    main {
+        display: grid;
+        place-items: center;
+        min-height: 100svh;
+        padding-block: var(--s-7);
+    }
+
+    .error-page {
+        width: min(100%, 560px);
+    }
+
+    .status {
+        margin: 0 0 var(--s-5);
+        padding-bottom: var(--s-4);
+        border-bottom: 1px solid var(--line);
+        font-family: var(--font-display);
+        font-size: clamp(6rem, 19vw, 12rem);
+        font-weight: 600;
+        letter-spacing: -0.08em;
+        line-height: 0.95;
+    }
+
+    .status span {
+        color: var(--orange);
+    }
+
+    h1 {
+        margin-bottom: var(--s-2);
+        font-size: clamp(2rem, 5vw, 3rem);
+        line-height: 1.1;
+        letter-spacing: var(--display-tracking);
+    }
+
+    .description {
+        margin-bottom: var(--s-6);
+        color: var(--muted);
+    }
+
+    .home-link {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--s-3);
+        min-height: 48px;
+        padding: var(--s-2) var(--s-4);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        font-weight: 500;
+    }
+
+    .home-link:hover {
+        border-color: var(--orange);
+    }
+</style>
