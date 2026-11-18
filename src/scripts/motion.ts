@@ -12,8 +12,8 @@ export function initMotion() {
     entered = true;
     gsap.timeline({defaults:{ease:'power3.out'}})
       .addLabel('introduce',0)
-      .from('[data-hero-line]',{y:18,opacity:0,duration:.6,stagger:{amount:.06,ease:'power2.out'},clearProps:'transform,opacity'},'introduce')
-      .from('[data-hero-item]',{opacity:0,duration:.45,clearProps:'opacity'},'introduce+=.08');
+      .from('[data-hero-line]',{y:18,opacity:0,duration:.75,stagger:{amount:.06,ease:'power2.out'},clearProps:'transform,opacity'},'introduce')
+      .from('[data-hero-item]',{opacity:0,duration:.55,clearProps:'opacity'},'introduce+=.08');
   });
   let notePlayed = false;
   media.add('(prefers-reduced-motion: no-preference)', () => {
